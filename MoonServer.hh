@@ -63,16 +63,19 @@ class MoonServer
   void start();
 
   void stop();
-  
-  void orderInsert(const std::string& instrument,
-                   double price, int volume,
-                   bool is_buy, bool is_closed);
+
+  void updateTradeInfo(int order_ref, const std::string& instru, bool is_buy, double price, int volume);
   
   void updateTradeInfo(int order_ref, double price, int volume);
 
   Strategy* strategy()
   {
     return strategy_.get();
+  }
+
+  ctp::TraderService* traderService()
+  {
+    return trader_service_.get();
   }
 
  private:

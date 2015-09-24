@@ -32,9 +32,7 @@ noinst_HEADERS = MoonConfig.hh \
 	Strategy.hh \
 	MoonLog.hh
 
-extra_files = env.sh.example moon.cfg.example log.cfg.example
-
-EXTRA_DIST = $extra_files
+EXTRA_DIST = env.sh.example moon.cfg.example log.cfg.example
 
 moondir = $(bindir)
-moon_DATA = $extra_files
+moon_DATA = $(EXTRA_DIST)

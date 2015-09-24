@@ -67,63 +67,14 @@ void MoonServer::run()
 
 }
 
-void MoonServer::orderInsert(const std::string& instrument,
-                             double price, int volume,
-                             bool is_buy, bool is_closed)
+
+void MoonServer::updateTradeInfo(int order_ref, const std::string& instru, bool is_buy, double price, int volume)
 {
-  MOON_CUSTOM <<"order insert:"
-              <<" instrument - " <<instrument
-              <<" price - " <<price
-              <<" volume - " <<volume
-              <<" is_buy - " <<std::boolalpha <<is_buy
-              <<" is_closed - " <<std::boolalpha <<is_closed;
-
-  std::string instrument_id = instrument;
-  ctp::OrderPriceType price_type = ctp::LIMIT_PRICE;
-  ctp::DirectionType direction = ctp::BUY;
-  double quote_price = price;
-  if( !is_buy )
-  {
-    direction = ctp::SELL;
-    quote_price -= config_->moonOptions()->delta_price;
-  }
-  else
-  {
-    quote_price += config_->moonOptions()->delta_price;
-  }
-
-  ctp::OpenCloseFlagType oc = ctp::OC_OPEN;
-  if( is_closed )
-  {
-    oc = ctp::OC_CLOSE_TODAY;
-  }
+  boost::unique_lock<boost::mutex> lock(trade_info_mutex_);
   
-  // double price = 4680;
-  // int volume = 1;
-  ctp::TimeConditionType tc = ctp::TC_GFD;
-  std::string specific_date;
-  ctp::VolumeConditionType vc = ctp::VC_AV;
-  int min_volume = 1;
-  ctp::ContingentConditionType cc = ctp::CC_IMMEDIATELY;
-  double stop_price = 0;
-  ctp::ForceCloseReasonType fc = ctp::FC_NOT_FORCFE_CLOSE;
-  int auto_suspend = 0;
-
-  int order_ref = trader_service_->orderInsert(instrument_id,
-                                               price_type,
-                                               direction, oc,
-                                               quote_price,
-                                               volume, tc,
-                                               specific_date,
-                                               vc, min_volume,
-                                               cc, stop_price,
-                                               fc, auto_suspend);
-
-  {
-    boost::unique_lock<boost::mutex> lock(trade_info_mutex_);
-    TradeInfo info(instrument, is_buy, price, volume);
-    trade_info_[order_ref] = info;
-  }
+  TradeInfo info(instru, is_buy, price, volume);
+  
+  trade_info_[order_ref] = info;
 }
 
 void MoonServer::updateTradeInfo(int order_ref, double price, int volume)

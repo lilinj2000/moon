@@ -172,9 +172,11 @@ void Strategy::statusInit(TickerInfo* instru1, TickerInfo* instru2)
     {
       MOON_CUSTOM <<"go .... !!!!!";
 
-      server_->orderInsert(instru2->instru, instru2->bid_price1, 1, false, false);
-
-      server_->orderInsert(instru1->instru, instru1->ask_price1, 1, true, false);
+      int order_ref1 = server_->traderService()->orderOpenSell(instru2->instru, instru2->bid_price1, 1);
+      server_->updateTradeInfo(order_ref1, instru2->instru, false, instru2->bid_price1, 1);
+      
+      int order_ref2 = server_->traderService()->orderOpenBuy(instru1->instru, instru1->ask_price1, 1);
+      server_->updateTradeInfo(order_ref2, instru1->instru, true, instru1->ask_price1, 1);
 
       updateStatus( ORDER_GOING );
     }
@@ -226,9 +228,11 @@ void Strategy::statusOrderTurnOver(TickerInfo* instru1, TickerInfo* instru2)
   {
     MOON_CUSTOM <<"spread reduced to the lower boundary, or the max wait ticker reached, Go close the order !!!! ";
 
-    server_->orderInsert(instru2->instru, instru2->ask_price1, 1, true, true);
-
-    server_->orderInsert(instru1->instru, instru1->bid_price1, 1, false, true);
+    int order_ref1 = server_->traderService()->orderCloseBuy(instru2->instru, instru2->ask_price1, 1);
+    server_->updateTradeInfo(order_ref1, instru2->instru, true, instru2->bid_price1, 1);
+    
+    int order_ref2 = server_->traderService()->orderCloseSell(instru1->instru, instru1->bid_price1, 1);
+    server_->updateTradeInfo(order_ref2, instru1->instru, false, instru1->ask_price1, 1);
     
     updateStatus( ORDER_CLOSE_GOING );
   }
