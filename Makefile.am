@@ -1,33 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
 
-# noinst_PROGRAMS = unittest
-# unittest_SOURCES = \
-# 		Config.cc \
-# 		ConfigTest.cc \
-# 		MDServiceCallbackImpl.cc \
-# 		TraderServiceCallbackImpl.cc \
-# 		MoonServer.cc \
-# 		MoonServerTest.cc \
-# 		Strategy.cc
-
-# unittest_CPPFLAGS = \
-# 		$(BOOST_CPPFLAGS) \
-# 		$(GTEST_CPPFLAGS) \
-# 		$(SOIL_CPPFLAGS) \
-# 		$(ES_CTP_CPPFLAGS)
-
-
-# unittest_LDADD = \
-# 	$(GTEST_LIBADD) \
-# 	$(BOOST_LIBADD) \
-# 	$(THOST_LIBADD) \
-# 	$(SOIL_LIBADD) \
-# 	$(ES_CTP_LIBADD)
-
-
-
-# unittest_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
-
 bin_PROGRAMS = moon
 moon_SOURCES = \
 	MoonConfig.cc \
@@ -60,7 +32,9 @@ noinst_HEADERS = MoonConfig.hh \
 	Strategy.hh \
 	MoonLog.hh
 
-EXTRA_DIST = env.sh moon.cfg log.cfg
+extra_files = env.sh.example moon.cfg.example log.cfg.example
+
+EXTRA_DIST = $extra_files
 
 moondir = $(bindir)
-moon_DATA = env.sh moon.cfg log.cfg
+moon_DATA = $extra_files

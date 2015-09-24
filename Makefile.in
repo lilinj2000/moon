@@ -390,9 +390,10 @@ noinst_HEADERS = MoonConfig.hh \
 	Strategy.hh \
 	MoonLog.hh
 
-EXTRA_DIST = env.sh moon.cfg log.cfg
+extra_files = env.sh.example moon.cfg.example log.cfg.example
+EXTRA_DIST = $extra_files
 moondir = $(bindir)
-moon_DATA = env.sh moon.cfg log.cfg
+moon_DATA = $extra_files
 all: all-am
 
 .SUFFIXES:
