@@ -83,19 +83,19 @@ CTP_LIBADD="-L$CTP_HOME -lthostmduserapi -lthosttraderapi"
 AC_SUBST(CTP_CPPFLAGS)
 AC_SUBST(CTP_LIBADD)
 
-dnl es-ctp lib
-ES_CTP_HOME=$home_es/ctp
+dnl cata lib
+CATA_HOME=$home_es/cata
 AC_ARG_WITH([es-ctp],
-    [AS_HELP_STRING([--with-es-ctp],
-        [home path of the es-ctp, defaults to $ES_CTP_HOME])],
-    [ES_CTP_HOME="$withval"],
-    [ES_CTP_HOME="$ES_CTP_HOME"])
-AC_SUBST([ES_CTP_HOME])
+    [AS_HELP_STRING([--with-cata],
+        [home path of the cata, defaults to $CATA_HOME])],
+    [CATA_HOME="$withval"],
+    [CATA_HOME="$CATA_HOME"])
+AC_SUBST([CATA_HOME])
 
-ES_CTP_CPPFLAGS="-I$ES_CTP_HOME/include"
-ES_CTP_LIBADD="$ES_CTP_HOME/lib/libctp.la"
-AC_SUBST(ES_CTP_CPPFLAGS)
-AC_SUBST(ES_CTP_LIBADD)
+CATA_CPPFLAGS="-I$CATA_HOME/include"
+CATA_LIBADD="$CATA_HOME/lib/libcata.la"
+AC_SUBST(CATA_CPPFLAGS)
+AC_SUBST(CATA_LIBADD)
 
 dnl gtest lib
 AC_ARG_WITH([gtest],

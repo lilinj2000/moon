@@ -1,7 +1,7 @@
 #include "MoonConfig.hh"
 #include "MoonLog.hh"
-#include "ctp/MDService.hh"
-#include "ctp/TraderService.hh"
+#include "cata/MDService.hh"
+#include "cata/TraderService.hh"
 
 #include <fstream>
 #include <iostream>
@@ -57,13 +57,13 @@ po::options_description* MoonOptions::configOptions()
 MoonConfig::MoonConfig(int argc, char* argv[])
 {
   moon_options_.reset(new MoonOptions());
-  ctp_md_options_.reset( ctp::MDService::createOptions() );
-  ctp_trader_options_.reset( ctp::TraderService::createOptions() );
+  cata_md_options_.reset( cata::MDService::createOptions() );
+  cata_trader_options_.reset( cata::TraderService::createOptions() );
       
   std::auto_ptr<soil::Config> config( soil::Config::create() );
   config->registerOptions( moon_options_.get() );
-  config->registerOptions( ctp_md_options_.get() );
-  config->registerOptions( ctp_trader_options_.get() );
+  config->registerOptions( cata_md_options_.get() );
+  config->registerOptions( cata_trader_options_.get() );
 
   config->configFile() = "moon.cfg";
   config->loadConfig(argc, argv);

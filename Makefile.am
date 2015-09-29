@@ -13,14 +13,14 @@ moon_CPPFLAGS =  \
 		$(BOOST_CPPFLAGS) \
 		$(GTEST_CPPFLAGS) \
 		$(SOIL_CPPFLAGS) \
-		$(ES_CTP_CPPFLAGS)
+		$(CATA_CPPFLAGS)
 
 
 moon_LDADD = \
 	$(BOOST_LIBADD) \
 	$(THOST_LIBADD) \
 	$(SOIL_LIBADD) \
-	$(ES_CTP_LIBADD)
+	$(CATA_LIBADD)
 
 moon_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 

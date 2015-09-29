@@ -10,7 +10,7 @@ delta_price = 0.0
 
 log_cfg = ./log.cfg
 
-[ctp_md]
+[cata_md]
 flow_path = ./mdflow/
 front_address = tcp://180.168.146.181:10210
 broker_id = 0148
@@ -18,7 +18,7 @@ user_id = 00095
 password = 888888
 
 
-[ctp_trader]
+[cata_trader]
 flow_path = ./traderflow/
 front_address = tcp://180.168.146.181:10200
 broker_id = 0148

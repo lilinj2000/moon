@@ -1,8 +1,8 @@
 #ifndef MOON_SERVER
 #define MOON_SERVER
 
-#include "ctp/MDService.hh"
-#include "ctp/TraderService.hh"
+#include "cata/MDService.hh"
+#include "cata/TraderService.hh"
 
 #include "MoonConfig.hh"
 
@@ -73,7 +73,7 @@ class MoonServer
     return strategy_.get();
   }
 
-  ctp::TraderService* traderService()
+  cata::TraderService* traderService()
   {
     return trader_service_.get();
   }
@@ -85,10 +85,10 @@ class MoonServer
   std::auto_ptr<MoonConfig> config_;
   
   std::auto_ptr<MDServiceCallbackImpl> md_callback_;
-  std::auto_ptr<ctp::MDService> md_service_;
+  std::auto_ptr<cata::MDService> md_service_;
 
   std::auto_ptr<TraderServiceCallbackImpl> trader_callback_;
-  std::auto_ptr<ctp::TraderService> trader_service_;
+  std::auto_ptr<cata::TraderService> trader_service_;
 
   std::auto_ptr<Strategy> strategy_;
 

@@ -16,11 +16,11 @@ MoonServer::MoonServer(int argc, char* argv[]):
 
   md_callback_.reset( new MDServiceCallbackImpl(this) );
   
-  md_service_.reset( ctp::MDService::createService(config_->ctpMDOptions(), md_callback_.get()) );
+  md_service_.reset( cata::MDService::createService(config_->cataMDOptions(), md_callback_.get()) );
 
 
   trader_callback_.reset( new TraderServiceCallbackImpl(this) );
-  trader_service_.reset( ctp::TraderService::createService(config_->ctpTraderOptions(), trader_callback_.get()) );
+  trader_service_.reset( cata::TraderService::createService(config_->cataTraderOptions(), trader_callback_.get()) );
 
   server_timer_.reset( soil::Condition::create() );
   
@@ -53,7 +53,7 @@ void MoonServer::stop()
 
 void MoonServer::run()
 {
-  ctp::InstrumentSet instrus;
+  cata::InstrumentSet instrus;
   instrus.insert( config_->moonOptions()->instru1 );
   instrus.insert( config_->moonOptions()->instru2 );
   

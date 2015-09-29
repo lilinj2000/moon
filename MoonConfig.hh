@@ -50,22 +50,22 @@ class MoonConfig
     return moon_options_.get();
   }
 
-  soil::Options* ctpMDOptions()
+  soil::Options* cataMDOptions()
   {
-    return ctp_md_options_.get();
+    return cata_md_options_.get();
   }
 
-  soil::Options* ctpTraderOptions()
+  soil::Options* cataTraderOptions()
   {
-    return ctp_trader_options_.get();
+    return cata_trader_options_.get();
   }
 
  private:
   std::auto_ptr<MoonOptions> moon_options_;
   
-  std::auto_ptr<soil::Options> ctp_md_options_;
+  std::auto_ptr<soil::Options> cata_md_options_;
 
-  std::auto_ptr<soil::Options> ctp_trader_options_;
+  std::auto_ptr<soil::Options> cata_trader_options_;
 };
 
 }  

@@ -639,9 +639,9 @@ LIBOBJS
 GTEST_LIBADD
 GTEST_CPPFLAGS
 GTEST_HOME
-ES_CTP_LIBADD
-ES_CTP_CPPFLAGS
-ES_CTP_HOME
+CATA_LIBADD
+CATA_CPPFLAGS
+CATA_HOME
 CTP_LIBADD
 CTP_CPPFLAGS
 CTP_HOME
@@ -1446,7 +1446,7 @@ Optional Packages:
   --with-soil             home path of the soil, defaults to $home_es/soil
   --with-boost            home path of the boost, defaults to $home_3rd/boost
   --with-ctp              path of the ctp api, defaults to $CTP_HOME
-  --with-es-ctp           home path of the es-ctp, defaults to $ES_CTP_HOME
+  --with-cata             home path of the cata, defaults to $CATA_HOME
   --with-gtest            home path of the gtest, defaults to $home_3rd/gtest
 
 Some influential environment variables:
@@ -15164,19 +15164,19 @@ CTP_LIBADD="-L$CTP_HOME -lthostmduserapi -lthosttraderapi"
 
 
 
-ES_CTP_HOME=$home_es/ctp
+CATA_HOME=$home_es/cata
 
 # Check whether --with-es-ctp was given.
 if test "${with_es_ctp+set}" = set; then :
-  withval=$with_es_ctp; ES_CTP_HOME="$withval"
+  withval=$with_es_ctp; CATA_HOME="$withval"
 else
-  ES_CTP_HOME="$ES_CTP_HOME"
+  CATA_HOME="$CATA_HOME"
 fi
 
 
 
-ES_CTP_CPPFLAGS="-I$ES_CTP_HOME/include"
-ES_CTP_LIBADD="$ES_CTP_HOME/lib/libctp.la"
+CATA_CPPFLAGS="-I$CATA_HOME/include"
+CATA_LIBADD="$CATA_HOME/lib/libcata.la"
 
 
 

@@ -1,14 +1,14 @@
 #ifndef MOON_TRADERSERVICE_CALLBACK_IMPL_HH
 #define MOON_TRADERSERVICE_CALLBACK_IMPL_HH
 
-#include "ctp/TraderService.hh"
+#include "cata/TraderService.hh"
 
 namespace moon
 {
 
 class MoonServer;
 
-class TraderServiceCallbackImpl : public ctp::TraderServiceCallback
+class TraderServiceCallbackImpl : public cata::TraderServiceCallback
 {
  public:
   TraderServiceCallbackImpl(MoonServer* server);
