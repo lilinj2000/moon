@@ -1443,7 +1443,7 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot=DIR Search for dependent libraries within DIR
                         (or the compiler's sysroot if not specified).
-  --with-soil             home path of the soil, defaults to $home_es/soil
+  --with-soil             home path of the soil, defaults to $home_libs/soil
   --with-boost            home path of the boost, defaults to $home_3rd/boost
   --with-ctp              path of the ctp api, defaults to $CTP_HOME
   --with-cata             home path of the cata, defaults to $CATA_HOME
@@ -15108,14 +15108,14 @@ LT_AGE=0
 
 
 home_3rd=~/3rd
-home_es=~/es
+home_libs=~/libs
 
-if test -d /app/3rd ; then
-   home_3rd=/app/3rd
+if test -d /llj/3rd ; then
+   home_3rd=/llj/3rd
 fi
 
-if test -d /app/es ; then
-   home_es=/app/es
+if test -d /llj/libs ; then
+   home_libs=/llj/libs
 fi
 
 
@@ -15124,7 +15124,7 @@ fi
 if test "${with_soil+set}" = set; then :
   withval=$with_soil; SOIL_HOME="$withval"
 else
-  SOIL_HOME="$home_es/soil"
+  SOIL_HOME="$home_libs/soil"
 fi
 
 
@@ -15173,7 +15173,7 @@ CTP_LIBADD="-L$CTP_HOME -lthostmduserapi -lthosttraderapi"
 
 
 
-CATA_HOME=$home_es/cata
+CATA_HOME=$home_libs/cata
 
 # Check whether --with-es-ctp was given.
 if test "${with_es_ctp+set}" = set; then :
