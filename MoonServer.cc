@@ -22,7 +22,7 @@ MoonServer::MoonServer(int argc, char* argv[]):
   trader_callback_.reset( new TraderServiceCallbackImpl(this) );
   trader_service_.reset( cata::TraderService::createService(config_->cataTraderOptions(), trader_callback_.get()) );
 
-  server_timer_.reset( soil::Condition::create() );
+  server_timer_.reset( soil::STimer::create() );
   
   strategy_.reset( new Strategy(config_->moonOptions(), this) );
 }

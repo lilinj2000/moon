@@ -61,11 +61,11 @@ class MoonConfig
   }
 
  private:
-  std::auto_ptr<MoonOptions> moon_options_;
+  std::unique_ptr<MoonOptions> moon_options_;
   
-  std::auto_ptr<soil::Options> cata_md_options_;
+  std::unique_ptr<soil::Options> cata_md_options_;
 
-  std::auto_ptr<soil::Options> cata_trader_options_;
+  std::unique_ptr<soil::Options> cata_trader_options_;
 };
 
 }  

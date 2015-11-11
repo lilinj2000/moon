@@ -31,7 +31,7 @@ void Strategy::pushTickerInfo(TickerInfo* ticker)
 {
   MOON_TRACE <<"Strategy::pushTickerInfo";
   
-  std::auto_ptr<TickerInfo> p_ticker(ticker) ;
+  std::unique_ptr<TickerInfo> p_ticker(ticker) ;
   
   if( p_ticker->instru == options_->instru1
       || p_ticker->instru == options_->instru2)

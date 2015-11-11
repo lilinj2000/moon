@@ -17,7 +17,7 @@ MDServiceCallbackImpl::MDServiceCallbackImpl(MoonServer* server):
 
 void MDServiceCallbackImpl::onRtnMarketData(const cata::DepthMarketData* data)
 {
-  std::auto_ptr<TickerInfo> aInfo(new TickerInfo());
+  std::unique_ptr<TickerInfo> aInfo(new TickerInfo());
   
   aInfo->instru = data->InstrumentID;
   aInfo->bid_price1 = data->BidPrice1;

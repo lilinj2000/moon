@@ -1,13 +1,13 @@
 #include "MoonServer.hh"
-#include "soil/Condition.hh"
+#include "soil/STimer.hh"
 
 int main(int argc, char* argv[])
 {
-  std::auto_ptr<moon::MoonServer> server(new moon::MoonServer(argc, argv));
+  std::unique_ptr<moon::MoonServer> server(new moon::MoonServer(argc, argv));
 
   server->start();
 
-  std::auto_ptr<soil::Condition> timer( soil::Condition::create() );
+  std::unique_ptr<soil::STimer> timer( soil::STimer::create() );
 
   while(true )
     timer->wait(5000);

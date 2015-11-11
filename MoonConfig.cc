@@ -60,7 +60,7 @@ MoonConfig::MoonConfig(int argc, char* argv[])
   cata_md_options_.reset( cata::MDService::createOptions() );
   cata_trader_options_.reset( cata::TraderService::createOptions() );
       
-  std::auto_ptr<soil::Config> config( soil::Config::create() );
+  std::unique_ptr<soil::Config> config( soil::Config::create() );
   config->registerOptions( moon_options_.get() );
   config->registerOptions( cata_md_options_.get() );
   config->registerOptions( cata_trader_options_.get() );
