@@ -3,7 +3,6 @@
 #include "MoonServer.hh"
 
 #include <boost/thread.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <numeric>
 
 namespace moon
@@ -87,10 +86,10 @@ void Strategy::run()
       if( res==boost::queue_op_status::closed )
         break;
       
-      boost::scoped_ptr<TickerInfo>  instru1(cur_ticker);
+      std::unique_ptr<TickerInfo>  instru1(cur_ticker);
 
       TickerInfo* next_ticker = NULL;
-      boost::scoped_ptr<TickerInfo>  instru2;
+      std::unique_ptr<TickerInfo>  instru2;
       do
       {
         boost::queue_op_status res = instru_ticker_queue_.wait_pull(next_ticker);
@@ -107,13 +106,15 @@ void Strategy::run()
         }
         else
         {
-          boost::posix_time::time_duration duration = instru2->time_stamp - instru1->time_stamp;
+          std::chrono::system_clock::duration d = instru2->time_stamp - instru1->time_stamp;
           MOON_DEBUG <<"instru2->seq: " <<instru2->seq <<"\t"
                      <<"instru1->seq: " <<instru1->seq;
           
           // MOON_DEBUG <<"duration ms: " <<ms;
 
-          if( duration.total_milliseconds()<1000 )
+          std::chrono::milliseconds ms  = std::chrono::duration_cast<std::chrono::milliseconds>(d);
+
+          if( ms.count()<1000 )
           {
             break;
           }

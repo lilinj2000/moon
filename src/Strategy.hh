@@ -2,9 +2,10 @@
 #define MOON_STRATEGY_HH
 
 #include "MoonConfig.hh"
+#include "soil/DateTime.hh"
 #include <boost/thread/sync_queue.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/atomic.hpp>
+#include <atomic>
 #include <deque>
 
 namespace moon
@@ -18,7 +19,7 @@ typedef struct
   double ask_price1;
   double ask_volume1;
 
-  boost::posix_time::ptime time_stamp;
+  soil::DateTime time_stamp;
   
   unsigned int seq;
 }TickerInfo;
@@ -88,7 +89,7 @@ class Strategy
   // boost::sync_queue<TickerInfo*> instru2_ticker_queue_;
 
   std::deque<double> spread_queue_;
-  boost::scoped_ptr<boost::thread> exec_thread_;
+  std::unique_ptr<boost::thread> exec_thread_;
 
   MoonOptions* options_;
 
@@ -98,7 +99,7 @@ class Strategy
   
   MoonServer* server_;
 
-  boost::atomic<int> wait_ticker_count_;
+  std::atomic_int wait_ticker_count_;
 };
 
 }  // namespace moon

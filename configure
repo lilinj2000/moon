@@ -642,15 +642,12 @@ GTEST_HOME
 CATA_LIBADD
 CATA_CPPFLAGS
 CATA_HOME
-CTP_LIBADD
-CTP_CPPFLAGS
-CTP_HOME
-BOOST_LIBADD
-BOOST_CPPFLAGS
-BOOST_HOME
 SOIL_LIBADD
 SOIL_CPPFLAGS
 SOIL_HOME
+BOOST_LIBADD
+BOOST_CPPFLAGS
+BOOST_HOME
 LT_AGE
 LT_REVISION
 LT_CURRENT
@@ -787,9 +784,8 @@ enable_fast_install
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
-with_soil
 with_boost
-with_ctp
+with_soil
 with_es_ctp
 with_gtest
 '
@@ -1444,9 +1440,8 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot=DIR Search for dependent libraries within DIR
                         (or the compiler's sysroot if not specified).
-  --with-soil             home path of the soil, defaults to $home_libs/soil
   --with-boost            home path of the boost, defaults to $home_3rd/boost
-  --with-ctp              path of the ctp api, defaults to $CTP_HOME
+  --with-soil             home path of the soil, defaults to $home_libs/soil
   --with-cata             home path of the cata, defaults to $CATA_HOME
   --with-gtest            home path of the gtest, defaults to $home_3rd/gtest
 
@@ -15310,22 +15305,6 @@ if test -d /llj/libs ; then
 fi
 
 
-
-# Check whether --with-soil was given.
-if test "${with_soil+set}" = set; then :
-  withval=$with_soil; SOIL_HOME="$withval"
-else
-  SOIL_HOME="$home_libs/soil"
-fi
-
-
-
-SOIL_CPPFLAGS="-I$SOIL_HOME/include"
-SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
-
-
-
-
 # Check whether --with-boost was given.
 if test "${with_boost+set}" = set; then :
   withval=$with_boost; BOOST_HOME="$withval"
@@ -15348,19 +15327,19 @@ BOOST_LIBADD="$BOOST_HOME/lib/libboost_log_setup.so \
 
 
 
-CTP_HOME=$home_3rd/v6.3.6_20141230traderapi_linux64
 
-# Check whether --with-ctp was given.
-if test "${with_ctp+set}" = set; then :
-  withval=$with_ctp; CTP_HOME="$withval"
+# Check whether --with-soil was given.
+if test "${with_soil+set}" = set; then :
+  withval=$with_soil; SOIL_HOME="$withval"
 else
-  CTP_HOME="$CTP_HOME"
+  SOIL_HOME="$home_libs/soil"
 fi
 
 
 
-CTP_CPPFLAGS=-I$CTP_HOME
-CTP_LIBADD="-L$CTP_HOME -lthostmduserapi -lthosttraderapi"
+SOIL_CPPFLAGS="-I$SOIL_HOME/include"
+SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
+
 
 
 
@@ -15395,7 +15374,7 @@ GTEST_LIBADD="$GTEST_HOME/lib/libgtest.a $GTEST_HOME/lib/libgtest_main.a"
 
 
 
-ac_config_files="$ac_config_files Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -16520,6 +16499,7 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

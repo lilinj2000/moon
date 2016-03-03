@@ -44,20 +44,6 @@ if test -d /llj/libs ; then
    home_libs=/llj/libs
 fi
 
-
-dnl soil lib
-AC_ARG_WITH([soil],
-    [AS_HELP_STRING([--with-soil],
-        [home path of the soil, defaults to $home_libs/soil])],
-    [SOIL_HOME="$withval"],
-    [SOIL_HOME="$home_libs/soil"])
-AC_SUBST([SOIL_HOME])
-
-SOIL_CPPFLAGS="-I$SOIL_HOME/include"
-SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
-AC_SUBST(SOIL_CPPFLAGS)
-AC_SUBST(SOIL_LIBADD)
-
 dnl boost lib
 AC_ARG_WITH([boost],
     [AS_HELP_STRING([--with-boost],
@@ -79,19 +65,19 @@ BOOST_LIBADD="$BOOST_HOME/lib/libboost_log_setup.so \
 AC_SUBST(BOOST_CPPFLAGS)
 AC_SUBST(BOOST_LIBADD)
 
-dnl thost api lib
-CTP_HOME=$home_3rd/v6.3.6_20141230traderapi_linux64
-AC_ARG_WITH([ctp],
-    [AS_HELP_STRING([--with-ctp],
-        [path of the ctp api, defaults to $CTP_HOME])],
-    [CTP_HOME="$withval"],
-    [CTP_HOME="$CTP_HOME"])
-AC_SUBST([CTP_HOME])
+dnl soil lib
+AC_ARG_WITH([soil],
+    [AS_HELP_STRING([--with-soil],
+        [home path of the soil, defaults to $home_libs/soil])],
+    [SOIL_HOME="$withval"],
+    [SOIL_HOME="$home_libs/soil"])
+AC_SUBST([SOIL_HOME])
 
-CTP_CPPFLAGS=-I$CTP_HOME
-CTP_LIBADD="-L$CTP_HOME -lthostmduserapi -lthosttraderapi"
-AC_SUBST(CTP_CPPFLAGS)
-AC_SUBST(CTP_LIBADD)
+SOIL_CPPFLAGS="-I$SOIL_HOME/include"
+SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
+AC_SUBST(SOIL_CPPFLAGS)
+AC_SUBST(SOIL_LIBADD)
+
 
 dnl cata lib
 CATA_HOME=$home_libs/cata
@@ -121,6 +107,7 @@ AC_SUBST(GTEST_CPPFLAGS)
 AC_SUBST(GTEST_LIBADD)
 
 AC_OUTPUT([
-	Makefile])
+	Makefile
+	src/Makefile])
 
 
