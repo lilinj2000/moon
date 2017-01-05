@@ -94,7 +94,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(moondir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_moon_OBJECTS = moon-MoonConfig.$(OBJEXT) \
+am_moon_OBJECTS = moon-Config.$(OBJEXT) \
 	moon-MDServiceCallbackImpl.$(OBJEXT) \
 	moon-TraderServiceCallbackImpl.$(OBJEXT) \
 	moon-MoonServer.$(OBJEXT) moon-Strategy.$(OBJEXT) \
@@ -338,7 +338,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 moon_SOURCES = \
-	MoonConfig.cc \
+	Config.cc \
 	MDServiceCallbackImpl.cc \
 	TraderServiceCallbackImpl.cc \
 	MoonServer.cc \
@@ -360,12 +360,12 @@ moon_LDADD = \
 moon_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 
 # header files
-noinst_HEADERS = MoonConfig.hh \
+noinst_HEADERS = Config.hh \
 	MDServiceCallbackImpl.hh \
 	TraderServiceCallbackImpl.hh \
 	MoonServer.hh \
 	Strategy.hh \
-	MoonLog.hh
+	Log.hh
 
 EXTRA_DIST = env.sh moon.cfg log.cfg
 moondir = $(bindir)
@@ -464,9 +464,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Config.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-MDServiceCallbackImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-MoonConfig.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-MoonServer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Strategy.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-TraderServiceCallbackImpl.Po@am__quote@
@@ -492,19 +492,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
-moon-MoonConfig.o: MoonConfig.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT moon-MoonConfig.o -MD -MP -MF $(DEPDIR)/moon-MoonConfig.Tpo -c -o moon-MoonConfig.o `test -f 'MoonConfig.cc' || echo '$(srcdir)/'`MoonConfig.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/moon-MoonConfig.Tpo $(DEPDIR)/moon-MoonConfig.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MoonConfig.cc' object='moon-MoonConfig.o' libtool=no @AMDEPBACKSLASH@
+moon-Config.o: Config.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT moon-Config.o -MD -MP -MF $(DEPDIR)/moon-Config.Tpo -c -o moon-Config.o `test -f 'Config.cc' || echo '$(srcdir)/'`Config.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/moon-Config.Tpo $(DEPDIR)/moon-Config.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Config.cc' object='moon-Config.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o moon-MoonConfig.o `test -f 'MoonConfig.cc' || echo '$(srcdir)/'`MoonConfig.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o moon-Config.o `test -f 'Config.cc' || echo '$(srcdir)/'`Config.cc
 
-moon-MoonConfig.obj: MoonConfig.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT moon-MoonConfig.obj -MD -MP -MF $(DEPDIR)/moon-MoonConfig.Tpo -c -o moon-MoonConfig.obj `if test -f 'MoonConfig.cc'; then $(CYGPATH_W) 'MoonConfig.cc'; else $(CYGPATH_W) '$(srcdir)/MoonConfig.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/moon-MoonConfig.Tpo $(DEPDIR)/moon-MoonConfig.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MoonConfig.cc' object='moon-MoonConfig.obj' libtool=no @AMDEPBACKSLASH@
+moon-Config.obj: Config.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT moon-Config.obj -MD -MP -MF $(DEPDIR)/moon-Config.Tpo -c -o moon-Config.obj `if test -f 'Config.cc'; then $(CYGPATH_W) 'Config.cc'; else $(CYGPATH_W) '$(srcdir)/Config.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/moon-Config.Tpo $(DEPDIR)/moon-Config.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Config.cc' object='moon-Config.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o moon-MoonConfig.obj `if test -f 'MoonConfig.cc'; then $(CYGPATH_W) 'MoonConfig.cc'; else $(CYGPATH_W) '$(srcdir)/MoonConfig.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o moon-Config.obj `if test -f 'Config.cc'; then $(CYGPATH_W) 'Config.cc'; else $(CYGPATH_W) '$(srcdir)/Config.cc'; fi`
 
 moon-MDServiceCallbackImpl.o: MDServiceCallbackImpl.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT moon-MDServiceCallbackImpl.o -MD -MP -MF $(DEPDIR)/moon-MDServiceCallbackImpl.Tpo -c -o moon-MDServiceCallbackImpl.o `test -f 'MDServiceCallbackImpl.cc' || echo '$(srcdir)/'`MDServiceCallbackImpl.cc

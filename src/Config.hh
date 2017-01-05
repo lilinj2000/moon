@@ -1,3 +1,6 @@
+// Copyright (c) 2010
+// All rights reserved.
+
 #ifndef MOON_CONFIG_HH
 #define MOON_CONFIG_HH
 
@@ -5,18 +8,15 @@
 #include <memory>
 #include "soil/Config.hh"
 
-namespace moon
-{
+namespace moon {
 
 namespace po = boost::program_options;
 
-class MoonOptions : public soil::Options
-{
+class Options : public soil::Options {
  public:
+  Options();
 
-  MoonOptions();
-  
-  virtual ~MoonOptions();
+  virtual ~Options();
 
   virtual po::options_description* configOptions();
 
@@ -31,44 +31,38 @@ class MoonOptions : public soil::Options
   int max_wait_ticker_size;
 
   double delta_price;
-  
+
   std::string log_cfg;
 
  private:
   boost::program_options::options_description config_options_;
 };
 
-class MoonConfig
-{
+class Config {
  public:
-  
-  MoonConfig(int argc=0, char* argv[]=NULL);
-  ~MoonConfig();
+  explicit Config(int argc = 0, char* argv[] = nullptr);
+  ~Config();
 
-  MoonOptions* moonOptions()
-  {
-    return moon_options_.get();
+  Options* options() {
+    return options_.get();
   }
 
-  soil::Options* cataMDOptions()
-  {
+  soil::Options* cataMDOptions() {
     return cata_md_options_.get();
   }
 
-  soil::Options* cataTraderOptions()
-  {
+  soil::Options* cataTraderOptions() {
     return cata_trader_options_.get();
   }
 
  private:
-  std::unique_ptr<MoonOptions> moon_options_;
-  
+  std::unique_ptr<Options> options_;
+
   std::unique_ptr<soil::Options> cata_md_options_;
 
   std::unique_ptr<soil::Options> cata_trader_options_;
 };
 
-}  
+}  // namespace moon
 
-
-#endif 
+#endif

@@ -1,23 +1,19 @@
-#include "MoonServer.hh"
-#include "MoonLog.hh"
+#include "Server.hh"
+#include "Log.hh"
 #include "MDServiceCallbackImpl.hh"
 #include "TraderServiceCallbackImpl.hh"
 #include "Strategy.hh"
 #include <boost/thread.hpp>
 
-namespace moon
-{
+namespace moon {
 
-MoonServer::MoonServer(int argc, char* argv[]):
-    server_running_(false)
-{
-
-  config_.reset( new MoonConfig(argc, argv) );
+Server::Server(int argc, char* argv[]):
+    server_running_(false) {
+  config_.reset( new Config(argc, argv) );
 
   md_callback_.reset( new MDServiceCallbackImpl(this) );
   
   md_service_.reset( cata::MDService::createService(config_->cataMDOptions(), md_callback_.get()) );
-
 
   trader_callback_.reset( new TraderServiceCallbackImpl(this) );
   trader_service_.reset( cata::TraderService::createService(config_->cataTraderOptions(), trader_callback_.get()) );
@@ -27,32 +23,26 @@ MoonServer::MoonServer(int argc, char* argv[]):
   strategy_.reset( new Strategy(config_->moonOptions(), this) );
 }
 
-MoonServer::~MoonServer()
+Server::~Server()
 {
 }
 
-void MoonServer::start()
-{
+void Server::start() {
 
-  if( !server_running_ )
-  {
+  if( !server_running_ ) {
     server_running_ = true;
 
-    server_thread_.reset(new boost::thread(&MoonServer::run, this));
+    server_thread_.reset(new boost::thread(&Server::run, this));
   }
-
-  
 }
 
-void MoonServer::stop()
-{
+void Server::stop() {
   server_running_ = false;
   
   server_timer_->notifyOne();
 }
 
-void MoonServer::run()
-{
+void Server::run() {
   cata::InstrumentSet instrus;
   instrus.insert( config_->moonOptions()->instru1 );
   instrus.insert( config_->moonOptions()->instru2 );
@@ -68,8 +58,7 @@ void MoonServer::run()
 }
 
 
-void MoonServer::updateTradeInfo(int order_ref, const std::string& instru, bool is_buy, double price, int volume)
-{
+void Server::updateTradeInfo(int order_ref, const std::string& instru, bool is_buy, double price, int volume) {
   boost::unique_lock<boost::mutex> lock(trade_info_mutex_);
   
   TradeInfo info(instru, is_buy, price, volume);
@@ -77,8 +66,7 @@ void MoonServer::updateTradeInfo(int order_ref, const std::string& instru, bool 
   trade_info_[order_ref] = info;
 }
 
-void MoonServer::updateTradeInfo(int order_ref, double price, int volume)
-{
+void Server::updateTradeInfo(int order_ref, double price, int volume) {
   MOON_CUSTOM <<"updateTradeInfo ... !!!!";
   
   boost::unique_lock<boost::mutex> lock(trade_info_mutex_);

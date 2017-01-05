@@ -11,12 +11,10 @@ namespace moon
 
 MDServiceCallbackImpl::MDServiceCallbackImpl(MoonServer* server):
     server_(server),
-    md_seq_(0)
-{
+    md_seq_(0) {
 }
 
-void MDServiceCallbackImpl::onRtnMarketData(const cata::DepthMarketData* data)
-{
+void MDServiceCallbackImpl::onRtnMarketData(const cata::DepthMarketData* data) {
   std::unique_ptr<TickerInfo> aInfo(new TickerInfo());
   
   aInfo->instru = data->InstrumentID;

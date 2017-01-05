@@ -1,10 +1,13 @@
+// Copyright (c) 2010
+// All rights reserved.
+
 #ifndef MOON_SERVER
 #define MOON_SERVER
 
 #include "cata/MDService.hh"
 #include "cata/TraderService.hh"
 
-#include "MoonConfig.hh"
+#include "Config.hh"
 
 #include <memory>
 #include <boost/thread.hpp>
@@ -12,15 +15,13 @@
 #include <boost/scoped_ptr.hpp>
 #include "soil/STimer.hh"
 
-namespace moon
-{
+namespace moon {
 
 class Strategy;
 class MDServiceCallbackImpl;
 class TraderServiceCallbackImpl;
 
-struct TradeInfo
-{
+struct TradeInfo {
   std::string instru_;
   bool is_buy_;
   double price_;
@@ -36,14 +37,13 @@ struct TradeInfo
       price_(price),
       volume_(volume),
       t_price_(-1),
-      t_volume_(0)
-  {
+      t_volume_(0) {
   }
 
-  TradeInfo() {}
+  TradeInfo() {
+  }
   
-  TradeInfo(const TradeInfo& tradeInfo)
-  {
+  TradeInfo(const TradeInfo& tradeInfo) {
     instru_ = tradeInfo.instru_;
     is_buy_ = tradeInfo.is_buy_;
     price_ = tradeInfo.price_;
@@ -53,12 +53,11 @@ struct TradeInfo
   }
 };
 
-class MoonServer 
-{
+class Server {
  public:
-  MoonServer(int argc, char* argv[]);
+  Server(int argc, char* argv[]);
 
-  ~MoonServer();
+  ~Server();
   
   void start();
 
@@ -68,21 +67,18 @@ class MoonServer
   
   void updateTradeInfo(int order_ref, double price, int volume);
 
-  Strategy* strategy()
-  {
+  Strategy* strategy() {
     return strategy_.get();
   }
 
-  cata::TraderService* traderService()
-  {
+  cata::TraderService* traderService() {
     return trader_service_.get();
   }
 
  private:
-
   void run();
 
-  std::unique_ptr<MoonConfig> config_;
+  std::unique_ptr<Config> config_;
   
   std::unique_ptr<MDServiceCallbackImpl> md_callback_;
   std::unique_ptr<cata::MDService> md_service_;
@@ -94,7 +90,6 @@ class MoonServer
 
   boost::mutex trade_info_mutex_;
   std::map<int, TradeInfo> trade_info_;
-
 
   bool server_running_;
   std::unique_ptr<soil::STimer> server_timer_;

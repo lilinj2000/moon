@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = foreign
 
 bin_PROGRAMS = moon
 moon_SOURCES = \
-	MoonConfig.cc \
+	Config.cc \
 	MDServiceCallbackImpl.cc \
 	TraderServiceCallbackImpl.cc \
 	MoonServer.cc \
@@ -25,12 +25,12 @@ moon_LDADD = \
 moon_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 
 # header files
-noinst_HEADERS = MoonConfig.hh \
+noinst_HEADERS = Config.hh \
 	MDServiceCallbackImpl.hh \
 	TraderServiceCallbackImpl.hh \
 	MoonServer.hh \
 	Strategy.hh \
-	MoonLog.hh
+	Log.hh
 
 EXTRA_DIST = env.sh moon.cfg log.cfg
 

@@ -1,18 +1,19 @@
+// Copyright (c) 2010
+// All rights reserved.
+
 #ifndef MOON_STRATEGY_HH
 #define MOON_STRATEGY_HH
 
-#include "MoonConfig.hh"
+#include "Config.hh"
 #include "soil/DateTime.hh"
 #include <boost/thread/sync_queue.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <atomic>
 #include <deque>
 
-namespace moon
-{
+namespace moon {
 
-typedef struct
-{
+typedef struct {
   std::string instru;
   double bid_price1;
   double bid_volume1;
@@ -25,8 +26,7 @@ typedef struct
 }TickerInfo;
 
 template< typename CharT, typename TraitsT >
-std::basic_ostream< CharT, TraitsT >& operator<<(std::basic_ostream< CharT, TraitsT >& os, TickerInfo const& aTicker)
-{
+std::basic_ostream< CharT, TraitsT >& operator<<(std::basic_ostream< CharT, TraitsT >& os, TickerInfo const& aTicker) {
   os <<std::endl;
   os <<"{" <<std::endl;
   os <<"    \"TickerInfo\": {" <<std::endl;
@@ -39,39 +39,33 @@ std::basic_ostream< CharT, TraitsT >& operator<<(std::basic_ostream< CharT, Trai
   os <<"        \"seq\": \"" <<aTicker.seq  <<std::endl;
   os <<"    }" <<std::endl;
   os <<"}" <<std::endl;
-
 }
 
 
 class MoonServer;
 
-class Strategy
-{
+class Strategy {
  public:
-  
-  Strategy(MoonOptions* options, MoonServer* server);
+  Strategy(Options* options, Server* server);
   
   ~Strategy();
 
   void pushTickerInfo(TickerInfo* ticker);
 
-  typedef enum
-  {
+  typedef enum {
     INIT_STATUS,
     ORDER_GOING,
     ORDER_TURNOVER,
     ORDER_CLOSE_GOING
   }Status;
 
-  void updateStatus(Status status)
-  {
+  void updateStatus(Status status) {
     status_ = status;
   }
 
   void updateStatus(double spread);
 
  protected:
-  
   void statusInit(TickerInfo* instru1, TickerInfo* instru2);
   
   void statusOrderGoing(TickerInfo* instru1, TickerInfo* instru2);
@@ -81,7 +75,6 @@ class Strategy
   void statusOrderCloseGoing(TickerInfo* instru1, TickerInfo* instru2);
   
  private:
-
   void run();
   
 
@@ -91,13 +84,13 @@ class Strategy
   std::deque<double> spread_queue_;
   std::unique_ptr<boost::thread> exec_thread_;
 
-  MoonOptions* options_;
+  Options* options_;
 
 
   Status status_;
   double t_spread_;
   
-  MoonServer* server_;
+  Server* server_;
 
   std::atomic_int wait_ticker_count_;
 };
@@ -105,4 +98,4 @@ class Strategy
 }  // namespace moon
 
 
-#endif // MOON_STATEGY_HH_
+#endif // MOON_STATEGY_HH
