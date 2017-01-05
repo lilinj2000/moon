@@ -57,6 +57,18 @@ BOOST_LIBADD="$BOOST_HOME/lib/libboost_log_setup.so \
 AC_SUBST(BOOST_CPPFLAGS)
 AC_SUBST(BOOST_LIBADD)
 
+dnl rapidjson lib
+RAPIDJSON_HOME=$home_3rd/rapidjson
+AC_ARG_WITH([rapidjson], 
+    [AS_HELP_STRING([--with-rapidjson],
+        [home path of the rapidjson, defaults to $RAPIDJSON_HOME])],
+    [RAPIDJSON_HOME="$withval"],
+    [RAPIDJSON_HOME="$RAPIDJSON_HOME"])
+AC_SUBST([RAPIDJSON_HOME])
+
+RAPIDJSON_CPPFLAGS="-I$RAPIDJSON_HOME/include"
+AC_SUBST(RAPIDJSON_CPPFLAGS)
+
 dnl soil lib
 AC_ARG_WITH([soil],
     [AS_HELP_STRING([--with-soil],
@@ -70,20 +82,32 @@ SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
 AC_SUBST(SOIL_CPPFLAGS)
 AC_SUBST(SOIL_LIBADD)
 
+dnl subject lib
+SUBJECT_HOME=$home_libs/subject
+AC_ARG_WITH([subject],
+    [AS_HELP_STRING([--with-subject],
+        [home path of the subject, defaults to $SUBJECT_HOME])],
+    [SUBJECT_HOME="$withval"],
+    [SUBJECT_HOME="$SUBJECT_HOME"])
+AC_SUBST([SUBJECT_HOME])
 
-dnl cata lib
-CATA_HOME=$home_libs/cata
-AC_ARG_WITH([es-ctp],
-    [AS_HELP_STRING([--with-cata],
-        [home path of the cata, defaults to $CATA_HOME])],
-    [CATA_HOME="$withval"],
-    [CATA_HOME="$CATA_HOME"])
-AC_SUBST([CATA_HOME])
+SUBJECT_CPPFLAGS="-I$SUBJECT_HOME/include"
+SUBJECT_LIBADD="$SUBJECT_HOME/lib/libsubject.la"
+AC_SUBST(SUBJECT_CPPFLAGS)
+AC_SUBST(SUBJECT_LIBADD)
 
-CATA_CPPFLAGS="-I$CATA_HOME/include"
-CATA_LIBADD="$CATA_HOME/lib/libcata.la"
-AC_SUBST(CATA_CPPFLAGS)
-AC_SUBST(CATA_LIBADD)
+dnl json lib
+AC_ARG_WITH([json],
+    [AS_HELP_STRING([--with-json],
+        [home path of the json, defaults to $home_libs/json])],
+    [JSON_HOME="$withval"],
+    [JSON_HOME="$home_libs/json"])
+AC_SUBST([JSON_HOME])
+
+JSON_CPPFLAGS="-I$JSON_HOME/include"
+JSON_LIBADD="$JSON_HOME/lib/libjson.la"
+AC_SUBST(JSON_CPPFLAGS)
+AC_SUBST(JSON_LIBADD)
 
 dnl gtest lib
 AC_ARG_WITH([gtest],

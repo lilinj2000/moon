@@ -7,8 +7,6 @@
 
 #include "Config.hh"
 #include "Log.hh"
-#include "cata/MDService.hh"
-#include "cata/TraderService.hh"
 
 namespace moon {
 
@@ -21,26 +19,8 @@ Options::Options():
        "instrument 1")
       ("moon.instru2", po::value<std::string>(&instru2),
        "instrument 2")
-
-      ("moon.spread_queue_size", po::value<int>(&spread_queue_size),
-       "spread queue size")
-
-      ("moon.spread_ma_lower_boundary",
-       po::value<double>(&spread_ma_lower_boundary),
-       "spread ma lower boundary")
-
-      ("moon.close_spread_lower_boundary",
-       po::value<double>(&close_spread_lower_boundary),
-       "close spread lower boundary")
-
-      ("moon.max_wait_ticker_size",
-       po::value<int>(&max_wait_ticker_size),
-       "max wait ticker size")
-
-      ("moon.delta_price",
-       po::value<double>(&delta_price),
-       "delta price")
-
+      ("moon.md_sub_addr", po::value<std::string>(&md_sub_addr),
+       "md sub address")
       ("moon.log_cfg",
        po::value<std::string>(&log_cfg),
        "log config file");
@@ -57,13 +37,9 @@ po::options_description* Options::configOptions() {
 
 Config::Config(int argc, char* argv[]) {
   options_.reset(new Options());
-  cata_md_options_.reset(cata::MDService::createOptions());
-  cata_trader_options_.reset(cata::TraderService::createOptions());
 
   std::unique_ptr<soil::Config> config(soil::Config::create());
   config->registerOptions(options_.get());
-  config->registerOptions(cata_md_options_.get());
-  config->registerOptions(cata_trader_options_.get());
 
   config->configFile() = "moon.cfg";
   config->loadConfig(argc, argv);

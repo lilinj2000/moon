@@ -639,12 +639,17 @@ LIB@&t@OBJS
 GTEST_LIBADD
 GTEST_CPPFLAGS
 GTEST_HOME
-CATA_LIBADD
-CATA_CPPFLAGS
-CATA_HOME
+JSON_LIBADD
+JSON_CPPFLAGS
+JSON_HOME
+SUBJECT_LIBADD
+SUBJECT_CPPFLAGS
+SUBJECT_HOME
 SOIL_LIBADD
 SOIL_CPPFLAGS
 SOIL_HOME
+RAPIDJSON_CPPFLAGS
+RAPIDJSON_HOME
 BOOST_LIBADD
 BOOST_CPPFLAGS
 BOOST_HOME
@@ -785,8 +790,10 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 with_boost
+with_rapidjson
 with_soil
-with_es_ctp
+with_subject
+with_json
 with_gtest
 '
       ac_precious_vars='build_alias
@@ -1441,8 +1448,11 @@ Optional Packages:
   --with-sysroot=DIR Search for dependent libraries within DIR
                         (or the compiler's sysroot if not specified).
   --with-boost            home path of the boost, defaults to @S|@home_3rd/boost
+  --with-rapidjson        home path of the rapidjson, defaults to
+                          @S|@RAPIDJSON_HOME
   --with-soil             home path of the soil, defaults to @S|@home_libs/soil
-  --with-cata             home path of the cata, defaults to @S|@CATA_HOME
+  --with-subject          home path of the subject, defaults to @S|@SUBJECT_HOME
+  --with-json             home path of the json, defaults to @S|@home_libs/json
   --with-gtest            home path of the gtest, defaults to @S|@home_3rd/gtest
 
 Some influential environment variables:
@@ -15319,6 +15329,20 @@ BOOST_LIBADD="$BOOST_HOME/lib/libboost_log_setup.so \
 
 
 
+RAPIDJSON_HOME=$home_3rd/rapidjson
+
+@%:@ Check whether --with-rapidjson was given.
+if test "${with_rapidjson+set}" = set; then :
+  withval=$with_rapidjson; RAPIDJSON_HOME="$withval"
+else
+  RAPIDJSON_HOME="$RAPIDJSON_HOME"
+fi
+
+
+
+RAPIDJSON_CPPFLAGS="-I$RAPIDJSON_HOME/include"
+
+
 
 @%:@ Check whether --with-soil was given.
 if test "${with_soil+set}" = set; then :
@@ -15334,20 +15358,34 @@ SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
 
 
 
+SUBJECT_HOME=$home_libs/subject
 
-CATA_HOME=$home_libs/cata
-
-@%:@ Check whether --with-es-ctp was given.
-if test "${with_es_ctp+set}" = set; then :
-  withval=$with_es_ctp; CATA_HOME="$withval"
+@%:@ Check whether --with-subject was given.
+if test "${with_subject+set}" = set; then :
+  withval=$with_subject; SUBJECT_HOME="$withval"
 else
-  CATA_HOME="$CATA_HOME"
+  SUBJECT_HOME="$SUBJECT_HOME"
 fi
 
 
 
-CATA_CPPFLAGS="-I$CATA_HOME/include"
-CATA_LIBADD="$CATA_HOME/lib/libcata.la"
+SUBJECT_CPPFLAGS="-I$SUBJECT_HOME/include"
+SUBJECT_LIBADD="$SUBJECT_HOME/lib/libsubject.la"
+
+
+
+
+@%:@ Check whether --with-json was given.
+if test "${with_json+set}" = set; then :
+  withval=$with_json; JSON_HOME="$withval"
+else
+  JSON_HOME="$home_libs/json"
+fi
+
+
+
+JSON_CPPFLAGS="-I$JSON_HOME/include"
+JSON_LIBADD="$JSON_HOME/lib/libjson.la"
 
 
 

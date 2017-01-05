@@ -1,16 +1,14 @@
-#include "MoonServer.hh"
-#include "soil/STimer.hh"
+// Copyright (c) 2010
+// All rights reserved.
 
-int main(int argc, char* argv[])
-{
-  std::unique_ptr<moon::MoonServer> server(new moon::MoonServer(argc, argv));
+#include "Server.hh"
+#include "soil/Pause.hh"
 
-  server->start();
+int main(int argc, char* argv[]) {
+  std::unique_ptr<moon::Server> server;
+  server.reset(new moon::Server(argc, argv));
 
-  std::unique_ptr<soil::STimer> timer( soil::STimer::create() );
-
-  while(true )
-    timer->wait(5000);
+  std::unique_ptr<soil::Pause> pause(soil::Pause::create());
 
   return 0;
 }

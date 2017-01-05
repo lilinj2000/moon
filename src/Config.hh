@@ -23,14 +23,7 @@ class Options : public soil::Options {
   std::string instru1;
   std::string instru2;
 
-  int spread_queue_size;
-
-  double spread_ma_lower_boundary;
-  double close_spread_lower_boundary;
-
-  int max_wait_ticker_size;
-
-  double delta_price;
+  std::string md_sub_addr;
 
   std::string log_cfg;
 
@@ -47,20 +40,8 @@ class Config {
     return options_.get();
   }
 
-  soil::Options* cataMDOptions() {
-    return cata_md_options_.get();
-  }
-
-  soil::Options* cataTraderOptions() {
-    return cata_trader_options_.get();
-  }
-
  private:
   std::unique_ptr<Options> options_;
-
-  std::unique_ptr<soil::Options> cata_md_options_;
-
-  std::unique_ptr<soil::Options> cata_trader_options_;
 };
 
 }  // namespace moon

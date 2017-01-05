@@ -1,124 +1,39 @@
+// Copyright (c) 2010
+// All rights reserved.
+
 #include "Server.hh"
 #include "Log.hh"
-#include "MDServiceCallbackImpl.hh"
-#include "TraderServiceCallbackImpl.hh"
-#include "Strategy.hh"
-#include <boost/thread.hpp>
 
 namespace moon {
 
-Server::Server(int argc, char* argv[]):
-    server_running_(false) {
-  config_.reset( new Config(argc, argv) );
+Server::Server(int argc, char* argv[]) {
+  MOON_TRACE <<"Server::Server()";
 
-  md_callback_.reset( new MDServiceCallbackImpl(this) );
-  
-  md_service_.reset( cata::MDService::createService(config_->cataMDOptions(), md_callback_.get()) );
+  config_.reset(new Config(argc, argv));
 
-  trader_callback_.reset( new TraderServiceCallbackImpl(this) );
-  trader_service_.reset( cata::TraderService::createService(config_->cataTraderOptions(), trader_callback_.get()) );
+  index_.reset(new Index(this,
+                         config_->options()->instru1,
+                         config_->options()->instru2));
 
-  server_timer_.reset( soil::STimer::create() );
-  
-  strategy_.reset( new Strategy(config_->moonOptions(), this) );
+  std::string filter = config_->options()->instru1;
+  filter += "|" + config_->options()->instru2;
+
+  MOON_DEBUG <<"filter: " <<filter;
+  subject::Options options {
+    filter,
+        config_->options()->md_sub_addr
+        };
+
+  subject_service_.reset(subject::Service::createService(options, this));
 }
 
-Server::~Server()
-{
+Server::~Server() {
 }
 
-void Server::start() {
+void Server::onMessage(const std::string& msg) {
+  MOON_TRACE <<"Server::onMessage()";
 
-  if( !server_running_ ) {
-    server_running_ = true;
-
-    server_thread_.reset(new boost::thread(&Server::run, this));
-  }
-}
-
-void Server::stop() {
-  server_running_ = false;
-  
-  server_timer_->notifyOne();
-}
-
-void Server::run() {
-  cata::InstrumentSet instrus;
-  instrus.insert( config_->moonOptions()->instru1 );
-  instrus.insert( config_->moonOptions()->instru2 );
-  
-  md_service_->subMarketData( instrus );
-
-
-  while( server_running_ )
-  {
-    server_timer_->wait(2000);
-  }
-
-}
-
-
-void Server::updateTradeInfo(int order_ref, const std::string& instru, bool is_buy, double price, int volume) {
-  boost::unique_lock<boost::mutex> lock(trade_info_mutex_);
-  
-  TradeInfo info(instru, is_buy, price, volume);
-  
-  trade_info_[order_ref] = info;
-}
-
-void Server::updateTradeInfo(int order_ref, double price, int volume) {
-  MOON_CUSTOM <<"updateTradeInfo ... !!!!";
-  
-  boost::unique_lock<boost::mutex> lock(trade_info_mutex_);
-
-  std::map<int, TradeInfo>::iterator i_iter = trade_info_.find(order_ref);
-
-  if( i_iter!=trade_info_.end() )
-  {
-    i_iter->second.t_price_ = price;
-    i_iter->second.t_volume_ += volume;
-  }
-  else
-  {
-    MOON_CUSTOM <<"trade order_ref - " <<order_ref <<" not found !!!";
-    return ;
-  }
-
-  bool all_traded = true;
-  double spread = 0;
-  for(i_iter=trade_info_.begin(); i_iter!=trade_info_.end(); i_iter++)
-  {
-    MOON_CUSTOM <<"trade info - volume_: " <<i_iter->second.volume_
-                <<" t_volume_: " <<i_iter->second.t_volume_;
-    
-    if( i_iter->second.volume_!=i_iter->second.t_volume_ )
-    {
-      all_traded = false;
-      break;
-    }
-    else
-    {
-      if( i_iter->second.instru_== config_->moonOptions()->instru2 )
-      {
-        spread += i_iter->second.t_price_;
-      }
-      else
-      {
-        spread -= i_iter->second.t_price_;
-      }
-
-      MOON_CUSTOM <<"trade info - t_price_: " <<i_iter->second.t_price_
-                  <<" spread: " <<spread;
-
-    }
-  }
-
-  if( all_traded )
-  {
-    trade_info_.clear();
-    
-    strategy_->updateStatus(spread);
-  }
+  index_->pushMsg(new std::string(msg));
 }
 
 };  // namespace moon
