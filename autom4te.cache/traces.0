@@ -2538,17 +2538,20 @@ m4trace:configure.ac:97: -1- m4_pattern_allow([^SUBJECT_LIBADD$])
 m4trace:configure.ac:105: -1- m4_pattern_allow([^JSON_HOME$])
 m4trace:configure.ac:109: -1- m4_pattern_allow([^JSON_CPPFLAGS$])
 m4trace:configure.ac:110: -1- m4_pattern_allow([^JSON_LIBADD$])
-m4trace:configure.ac:118: -1- m4_pattern_allow([^GTEST_HOME$])
-m4trace:configure.ac:122: -1- m4_pattern_allow([^GTEST_CPPFLAGS$])
-m4trace:configure.ac:123: -1- m4_pattern_allow([^GTEST_LIBADD$])
-m4trace:configure.ac:125: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
+m4trace:configure.ac:119: -1- m4_pattern_allow([^ZOD_HOME$])
+m4trace:configure.ac:123: -1- m4_pattern_allow([^ZOD_CPPFLAGS$])
+m4trace:configure.ac:124: -1- m4_pattern_allow([^ZOD_LIBADD$])
+m4trace:configure.ac:132: -1- m4_pattern_allow([^GTEST_HOME$])
+m4trace:configure.ac:136: -1- m4_pattern_allow([^GTEST_CPPFLAGS$])
+m4trace:configure.ac:137: -1- m4_pattern_allow([^GTEST_LIBADD$])
+m4trace:configure.ac:139: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
 You should run autoupdate.], [])
-m4trace:configure.ac:125: -1- m4_pattern_allow([^LIB@&t@OBJS$])
-m4trace:configure.ac:125: -1- m4_pattern_allow([^LTLIBOBJS$])
-m4trace:configure.ac:125: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
-m4trace:configure.ac:125: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
-m4trace:configure.ac:125: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
-m4trace:configure.ac:125: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
-m4trace:configure.ac:125: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
-m4trace:configure.ac:125: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
-m4trace:configure.ac:125: -1- _LT_PROG_LTMAIN
+m4trace:configure.ac:139: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:139: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:139: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:139: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:139: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:139: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:139: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:139: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:139: -1- _LT_PROG_LTMAIN

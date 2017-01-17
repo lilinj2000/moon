@@ -61,16 +61,13 @@ void Index::msgCallback(const std::string* msg) {
       }
 
       if (!md_instru1_->time_stamp.empty()
-           && (md_instru1_->time_stamp
-               == md_instru2_->time_stamp)) {
+          && !md_instru2_->time_stamp.empty()) {
         // compute the ma
         ma1_queue_.push(md_instru2_->bid_price1
                         - md_instru1_->ask_price1);
 
         ma2_queue_.push(md_instru2_->ask_price1
                         - md_instru1_->bid_price1);
-
-        md_instru1_->time_stamp = "";
       }
     }
   }

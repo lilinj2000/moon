@@ -24,6 +24,9 @@ class Options : public soil::Options {
   std::string instru2;
 
   std::string md_sub_addr;
+  std::string trade_sub_addr;
+
+  std::string push_addr;
 
   std::string log_cfg;
 

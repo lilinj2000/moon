@@ -109,6 +109,20 @@ JSON_LIBADD="$JSON_HOME/lib/libjson.la"
 AC_SUBST(JSON_CPPFLAGS)
 AC_SUBST(JSON_LIBADD)
 
+dnl zod lib
+ZOD_HOME=$home_libs/zod
+AC_ARG_WITH([zod], 
+    [AS_HELP_STRING([--with-zod],
+        [home path of the zod, defaults to $ZOD_HOME])],
+    [ZOD_HOME="$withval"],
+    [ZOD_HOME="$ZOD_HOME"])
+AC_SUBST([ZOD_HOME])
+
+ZOD_CPPFLAGS="-I$ZOD_HOME/include"
+ZOD_LIBADD="$ZOD_HOME/lib/libzod.la"
+AC_SUBST(ZOD_CPPFLAGS)
+AC_SUBST(ZOD_LIBADD)
+
 dnl gtest lib
 AC_ARG_WITH([gtest],
     [AS_HELP_STRING([--with-gtest],

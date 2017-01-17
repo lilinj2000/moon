@@ -99,7 +99,8 @@ am_moon_OBJECTS = moon-Config.$(OBJEXT) moon-Index.$(OBJEXT) \
 moon_OBJECTS = $(am_moon_OBJECTS)
 am__DEPENDENCIES_1 =
 moon_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -285,6 +286,9 @@ SUBJECT_CPPFLAGS = @SUBJECT_CPPFLAGS@
 SUBJECT_HOME = @SUBJECT_HOME@
 SUBJECT_LIBADD = @SUBJECT_LIBADD@
 VERSION = @VERSION@
+ZOD_CPPFLAGS = @ZOD_CPPFLAGS@
+ZOD_HOME = @ZOD_HOME@
+ZOD_LIBADD = @ZOD_LIBADD@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -351,13 +355,15 @@ moon_CPPFLAGS = \
 		$(SOIL_CPPFLAGS) \
 		$(SUBJECT_CPPFLAGS) \
 		$(RAPIDJSON_CPPFLAGS) \
-		$(JSON_CPPFLAGS)
+		$(JSON_CPPFLAGS) \
+		$(ZOD_CPPFLAGS)
 
 moon_LDADD = \
 	$(BOOST_LIBADD) \
 	$(SOIL_LIBADD) \
 	$(SUBJECT_LIBADD) \
-	$(JSON_LIBADD)
+	$(JSON_LIBADD) \
+	$(ZOD_LIBADD)
 
 moon_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 

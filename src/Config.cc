@@ -21,6 +21,10 @@ Options::Options():
        "instrument 2")
       ("moon.md_sub_addr", po::value<std::string>(&md_sub_addr),
        "md sub address")
+      ("moon.trade_sub_addr", po::value<std::string>(&trade_sub_addr),
+       "trade sub address")
+      ("moon.push_addr", po::value<std::string>(&push_addr),
+       "push address")
       ("moon.log_cfg",
        po::value<std::string>(&log_cfg),
        "log config file");

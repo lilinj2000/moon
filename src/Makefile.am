@@ -13,14 +13,16 @@ moon_CPPFLAGS =  \
 		$(SOIL_CPPFLAGS) \
 		$(SUBJECT_CPPFLAGS) \
 		$(RAPIDJSON_CPPFLAGS) \
-		$(JSON_CPPFLAGS)
+		$(JSON_CPPFLAGS) \
+		$(ZOD_CPPFLAGS)
 
 
 moon_LDADD = \
 	$(BOOST_LIBADD) \
 	$(SOIL_LIBADD) \
 	$(SUBJECT_LIBADD) \
-	$(JSON_LIBADD)
+	$(JSON_LIBADD) \
+	$(ZOD_LIBADD)
 
 moon_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 
