@@ -25,6 +25,18 @@ Options::Options():
        "trade sub address")
       ("moon.push_addr", po::value<std::string>(&push_addr),
        "push address")
+      ("moon.basis_queue_size", po::value<int>(&basis_queue_size),
+       "basis queue size")
+      ("moon.basis_delta_open", po::value<double>(&basis_delta_open),
+       "basis delta open")
+      ("moon.profit_close", po::value<double>(&profit_close),
+       "profit close")
+      ("moon.fee_per_volume", po::value<double>(&fee_per_volume),
+       "fee per volume")
+      ("moon.fee_per_money", po::value<double>(&fee_per_money),
+       "fee per money")
+      ("moon.volume_multiple", po::value<double>(&volume_multiple),
+       "volume multiple")
       ("moon.log_cfg",
        po::value<std::string>(&log_cfg),
        "log config file");

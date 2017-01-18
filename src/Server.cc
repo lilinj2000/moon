@@ -11,9 +11,11 @@ Server::Server(int argc, char* argv[]) {
 
   config_.reset(new Config(argc, argv));
 
-  index_.reset(new Index(this,
+  tick_.reset(new Tick(this,
                          config_->options()->instru1,
                          config_->options()->instru2));
+
+  context_.reset(new Context(this));
 
   push_service_.reset(zod::PushService::create(config_->options()->push_addr));
 
@@ -43,7 +45,7 @@ Server::~Server() {
 void Server::MDServiceCallback::onMessage(const std::string& msg) {
   MOON_TRACE <<"Server::MDServiceCallback::onMessage()";
 
-  server_->index_->pushMsg(new std::string(msg));
+  server_->tick_->pushMsg(new std::string(msg));
 }
 
 void Server::TradeServiceCallback::onMessage(const std::string& msg) {

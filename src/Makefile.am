@@ -3,7 +3,9 @@ AUTOMAKE_OPTIONS = foreign
 bin_PROGRAMS = moon
 moon_SOURCES = \
 	Config.cc \
-	Index.cc \
+	State.cc \
+	Context.cc \
+	Tick.cc \
 	Server.cc \
 	Main.cc
 
@@ -28,7 +30,9 @@ moon_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 
 # header files
 noinst_HEADERS = Config.hh \
-	Index.hh \
+	State.hh \
+	Context.hh \
+	Tick.hh \
 	Server.hh \
 	Log.hh
 

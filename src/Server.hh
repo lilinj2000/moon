@@ -6,7 +6,8 @@
 
 #include <memory>
 #include "Config.hh"
-#include "Index.hh"
+#include "Tick.hh"
+#include "Context.hh"
 #include "subject/Service.hh"
 #include "zod/PushService.hh"
 
@@ -18,6 +19,13 @@ class Server {
 
   ~Server();
 
+  Context* context() {
+    return context_.get();
+  }
+
+  Config* config() {
+    return config_.get();
+  }
 
  private:
   std::unique_ptr<Config> config_;
@@ -54,7 +62,9 @@ class Server {
 
   std::unique_ptr<zod::PushService> push_service_;
 
-  std::unique_ptr<Index> index_;
+  std::unique_ptr<Tick> tick_;
+
+  std::unique_ptr<Context> context_;
 };
 
 };  // namespace moon

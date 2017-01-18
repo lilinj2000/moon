@@ -2,31 +2,32 @@
 // All rights reserved.
 
 #include "Log.hh"
-#include "Index.hh"
+#include "Tick.hh"
+#include "Server.hh"
 #include "json/json.hh"
 
 namespace moon {
 
-Index::Index(Server* server,
+Tick::Tick(Server* server,
              const std::string& instru1,
              const std::string& instru2) :
     server_(server),
     instru1_(instru1),
     instru2_(instru2){
-  MOON_TRACE <<"Index::Index()";
+  MOON_TRACE <<"Tick::Tick()";
 
-  md_queue_.reset(new soil::MsgQueue<std::string, Index>(this));
+  md_queue_.reset(new soil::MsgQueue<std::string, Tick>(this));
 
   md_instru1_.reset(new MDInfo());
   md_instru2_.reset(new MDInfo());
 }
 
-Index::~Index() {
-  MOON_TRACE <<"Index::~Index()";
+Tick::~Tick() {
+  MOON_TRACE <<"Tick::~Tick()";
 }
 
-void Index::msgCallback(const std::string* msg) {
-  MOON_TRACE <<"Index::msgCallback()";
+void Tick::msgCallback(const std::string* msg) {
+  MOON_TRACE <<"Tick::msgCallback()";
 
   MOON_DEBUG <<*msg;
 
@@ -62,12 +63,15 @@ void Index::msgCallback(const std::string* msg) {
 
       if (!md_instru1_->time_stamp.empty()
           && !md_instru2_->time_stamp.empty()) {
-        // compute the ma
-        ma1_queue_.push(md_instru2_->bid_price1
-                        - md_instru1_->ask_price1);
+        // compute the basis
+        // double long_basis = md_instru2_->bid_price1
+        //     - md_instru1_->ask_price1;
 
-        ma2_queue_.push(md_instru2_->ask_price1
-                        - md_instru1_->bid_price1);
+        // double short_basis = md_instru2_->ask_price1
+        //     - md_instru1_->bid_price1;
+
+        server_->context()->handleMDInfo(*md_instru1_,
+                                        *md_instru2_);
       }
     }
   }

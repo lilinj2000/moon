@@ -25,8 +25,14 @@ class Options : public soil::Options {
 
   std::string md_sub_addr;
   std::string trade_sub_addr;
-
   std::string push_addr;
+
+  int basis_queue_size;
+  double basis_delta_open;
+  double profit_close;
+  double fee_per_volume;
+  double fee_per_money;
+  double volume_multiple;
 
   std::string log_cfg;
 

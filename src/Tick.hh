@@ -1,8 +1,8 @@
 // Copyright (c) 2010
 // All rights reserved.
 
-#ifndef MOON_INDEX_HH
-#define MOON_INDEX_HH
+#ifndef MOON_TICK_HH
+#define MOON_TICK_HH
 
 #include <queue>
 #include "soil/MsgQueue.hh"
@@ -18,13 +18,13 @@ typedef struct {
   double ask_price1;
 }MDInfo;
 
-class Index {
+class Tick {
  public:
-  Index(Server *,
+  Tick(Server *,
         const std::string& instru1,
         const std::string& instru2);
 
-  ~Index();
+  ~Tick();
 
   void msgCallback(const std::string *);
 
@@ -41,10 +41,7 @@ class Index {
   std::unique_ptr<MDInfo> md_instru1_;
   std::unique_ptr<MDInfo> md_instru2_;
 
-  std::unique_ptr<soil::MsgQueue<std::string, Index> > md_queue_;
-
-  std::queue<double> ma1_queue_;
-  std::queue<double> ma2_queue_;
+  std::unique_ptr<soil::MsgQueue<std::string, Tick> > md_queue_;
 };
   
 } // namespace moon
