@@ -29,25 +29,25 @@ State* State::createState(StateID id, Context* context) {
 void ShortPositionInitState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"ShortPositionInitState::handleMDInfo()";
 
-  // context()->basisEvent(long_basis, short_basis);
+  context()->basisEvent(md_instru1, md_instru2);
 }
 
 void ShortPositionOpenState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"ShortPositionOpenState::handleMDInfo()";
 
-  // context()->pushBasis(long_basis, short_basis);
+  context()->pushBasis(md_instru1, md_instru2);
 }
 
 void PositionInitState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionInitState::handleMDInfo()";
 
-  // context()->pushBasis(long_basis, short_basis);
+  context()->pushBasis(md_instru1, md_instru2);
 }
 
 void PositionCloseState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionCloseState::handleMDInfo()";
 
-  // context()->pushBasis(long_basis, short_basis);
+  context()->pushBasis(md_instru1, md_instru2);
 }
 
 };  // namespace moon

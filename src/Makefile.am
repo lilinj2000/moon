@@ -4,6 +4,7 @@ bin_PROGRAMS = moon
 moon_SOURCES = \
 	Config.cc \
 	State.cc \
+	Order.cc \
 	Context.cc \
 	Tick.cc \
 	Server.cc \
@@ -31,6 +32,7 @@ moon_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 # header files
 noinst_HEADERS = Config.hh \
 	State.hh \
+	Order.hh \
 	Context.hh \
 	Tick.hh \
 	Server.hh \

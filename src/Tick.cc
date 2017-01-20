@@ -16,10 +16,21 @@ Tick::Tick(Server* server,
     instru2_(instru2){
   MOON_TRACE <<"Tick::Tick()";
 
-  md_queue_.reset(new soil::MsgQueue<std::string, Tick>(this));
+  tick_queue_.reset(new soil::MsgQueue<std::string, Tick>(this));
 
   md_instru1_.reset(new MDInfo());
   md_instru2_.reset(new MDInfo());
+
+  std::string filter = server_->config()->options()->instru1;
+  filter += "|" + server_->config()->options()->instru2;
+
+  MOON_DEBUG <<"filter: " <<filter;
+  subject::Options tick_options {
+    filter,
+        server_->config()->options()->tick_sub_addr
+        };
+  tick_callback_.reset(new TickServiceCallback(this));
+  tick_service_.reset(subject::Service::createService(tick_options, tick_callback_.get()));
 }
 
 Tick::~Tick() {
@@ -63,19 +74,18 @@ void Tick::msgCallback(const std::string* msg) {
 
       if (!md_instru1_->time_stamp.empty()
           && !md_instru2_->time_stamp.empty()) {
-        // compute the basis
-        // double long_basis = md_instru2_->bid_price1
-        //     - md_instru1_->ask_price1;
-
-        // double short_basis = md_instru2_->ask_price1
-        //     - md_instru1_->bid_price1;
 
         server_->context()->handleMDInfo(*md_instru1_,
                                         *md_instru2_);
       }
     }
   }
-
 }
+
+void Tick::TickServiceCallback::onMessage(const std::string& msg) {
+  MOON_TRACE <<"Tick::TickServiceCallback::onMessage()";
+  tick_->pushMsg(new std::string(msg));
+}
+
 
 }  // namespace moon

@@ -27,38 +27,72 @@ void Context::handleMDInfo(const MDInfo& md_instru1,
   states_[state_id_]->handleMDInfo(md_instru1, md_instru2);
 }
 
-void Context::basisEvent(double long_basis, double short_basis) {
+void Context::basisEvent(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"Context::basisEvent()";
 
-  int basis_queue_size = server_->config()->options()->basis_queue_size;
+  double long_basis = md_instru2.bid_price1
+      - md_instru1.ask_price1;
 
-  if (long_basis_queue_.size() >= basis_queue_size) {
-    // double ma = std::accumulate(long_basis_queue_.begin(),
-    //                             long_basis_queue_.end(),
-    //                             0) / long_basis_queue_.size();
-    // double basis_delta_open = server_->config()->options()->basis_delta_open;
-    // if (std::fabs(long_basis - ma)) >= basis_delta_open) {
-    // // just do open for long basis
-    // return;
+  double short_basis = md_instru2.ask_price1
+      - md_instru1.bid_price1;
+
+  int queue_size = server_->config()->options()->basis_queue_size;
+
+  double delta_open = server_->config()->options()->basis_delta_open;
+
+  if (triggerOpen(long_basis, long_basis_queue_,
+                  queue_size, delta_open)) {
+    // buy instru1, sell instru2
+  } else if (triggerOpen(short_basis,
+                         short_basis_queue_,
+                         queue_size, delta_open)) {
+    // sell instru1, buy instru2
   }
+
+  pushBasis(md_instru1, md_instru2);
 }
 
-void Context::pushBasis(double long_basis, double short_basis) {
+bool Context::triggerOpen(double basis,
+                          const BasisQueue& basis_queue,
+                          int queue_size,
+                          double delta) {
+  MOON_TRACE <<"Context::triggerOpen()";
+
+  if (basis_queue.size() >= queue_size) {
+    double ma = std::accumulate(basis_queue.begin(),
+                                basis_queue.end(),
+                                0) / basis_queue.size();
+
+    if (std::fabs(basis - ma) >= delta) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+void Context::pushBasis(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"Context::pushBasis()";
+
+  double long_basis = md_instru2.bid_price1
+      - md_instru1.ask_price1;
+
+  double short_basis = md_instru2.ask_price1
+      - md_instru1.bid_price1;
 
   int basis_queue_size = server_->config()->options()->basis_queue_size;
 
   while (long_basis_queue_.size() >= basis_queue_size) {
-    long_basis_queue_.pop();
+    long_basis_queue_.pop_front();
   }
 
   while (short_basis_queue_.size() >= basis_queue_size) {
-    short_basis_queue_.pop();
+    short_basis_queue_.pop_front();
   }
   
-  long_basis_queue_.push(long_basis);
+  long_basis_queue_.push_back(long_basis);
 
-  short_basis_queue_.push(short_basis);
+  short_basis_queue_.push_back(short_basis);
 }
 
 };  // namespace moon

@@ -5,11 +5,13 @@
 #define MOON_CONTEXT_HH
 
 #include <map>
-#include <queue>
+#include <deque>
 #include <mutex>
 #include "State.hh"
 
 namespace moon {
+
+typedef std::deque<double> BasisQueue;
 
 class Server;
 
@@ -22,8 +24,12 @@ class Context {
 
   void handleMDInfo(const MDInfo&, const MDInfo&);
 
-  void basisEvent(double long_basis, double short_basis);
-  void pushBasis(double long_basis, double short_basis);
+  void basisEvent(const MDInfo&, const MDInfo&);
+  void pushBasis(const MDInfo&, const MDInfo&);
+
+ protected:
+  bool triggerOpen(double basis, const BasisQueue&,
+                   int queue_size, double delta);
 
  private:
   Server* server_;
@@ -35,8 +41,8 @@ class Context {
   std::map<StateID, State*> states_;
 
   // basis
-  std::queue<double> long_basis_queue_;
-  std::queue<double> short_basis_queue_;
+  BasisQueue long_basis_queue_;
+  BasisQueue short_basis_queue_;
 };
 
 };  // namespace moon

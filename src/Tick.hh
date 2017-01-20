@@ -4,7 +4,7 @@
 #ifndef MOON_TICK_HH
 #define MOON_TICK_HH
 
-#include <queue>
+#include "subject/Service.hh"
 #include "soil/MsgQueue.hh"
 
 namespace moon {
@@ -29,7 +29,7 @@ class Tick {
   void msgCallback(const std::string *);
 
   void pushMsg(std::string* msg) {
-    md_queue_->pushMsg(msg);
+    tick_queue_->pushMsg(msg);
   }
 
  private:
@@ -41,7 +41,22 @@ class Tick {
   std::unique_ptr<MDInfo> md_instru1_;
   std::unique_ptr<MDInfo> md_instru2_;
 
-  std::unique_ptr<soil::MsgQueue<std::string, Tick> > md_queue_;
+  class TickServiceCallback : public subject::ServiceCallback {
+   public:
+    TickServiceCallback(Tick* tick):
+        tick_(tick) {
+    }
+
+    virtual void onMessage(const std::string& msg);
+
+   private:
+    Tick* tick_;
+  };
+  friend class TickServiceCallback;
+  std::unique_ptr<TickServiceCallback> tick_callback_;
+  std::unique_ptr<subject::Service> tick_service_;
+
+  std::unique_ptr<soil::MsgQueue<std::string, Tick> > tick_queue_;
 };
   
 } // namespace moon

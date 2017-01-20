@@ -95,8 +95,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(moondir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_moon_OBJECTS = moon-Config.$(OBJEXT) moon-State.$(OBJEXT) \
-	moon-Context.$(OBJEXT) moon-Tick.$(OBJEXT) \
-	moon-Server.$(OBJEXT) moon-Main.$(OBJEXT)
+	moon-Order.$(OBJEXT) moon-Context.$(OBJEXT) \
+	moon-Tick.$(OBJEXT) moon-Server.$(OBJEXT) moon-Main.$(OBJEXT)
 moon_OBJECTS = $(am_moon_OBJECTS)
 am__DEPENDENCIES_1 =
 moon_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -347,6 +347,7 @@ AUTOMAKE_OPTIONS = foreign
 moon_SOURCES = \
 	Config.cc \
 	State.cc \
+	Order.cc \
 	Context.cc \
 	Tick.cc \
 	Server.cc \
@@ -373,6 +374,7 @@ moon_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 # header files
 noinst_HEADERS = Config.hh \
 	State.hh \
+	Order.hh \
 	Context.hh \
 	Tick.hh \
 	Server.hh \
@@ -478,6 +480,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Config.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Context.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Order.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Server.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-State.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moon-Tick.Po@am__quote@
@@ -530,6 +533,20 @@ moon-State.obj: State.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='State.cc' object='moon-State.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o moon-State.obj `if test -f 'State.cc'; then $(CYGPATH_W) 'State.cc'; else $(CYGPATH_W) '$(srcdir)/State.cc'; fi`
+
+moon-Order.o: Order.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT moon-Order.o -MD -MP -MF $(DEPDIR)/moon-Order.Tpo -c -o moon-Order.o `test -f 'Order.cc' || echo '$(srcdir)/'`Order.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/moon-Order.Tpo $(DEPDIR)/moon-Order.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Order.cc' object='moon-Order.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o moon-Order.o `test -f 'Order.cc' || echo '$(srcdir)/'`Order.cc
+
+moon-Order.obj: Order.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT moon-Order.obj -MD -MP -MF $(DEPDIR)/moon-Order.Tpo -c -o moon-Order.obj `if test -f 'Order.cc'; then $(CYGPATH_W) 'Order.cc'; else $(CYGPATH_W) '$(srcdir)/Order.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/moon-Order.Tpo $(DEPDIR)/moon-Order.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='Order.cc' object='moon-Order.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o moon-Order.obj `if test -f 'Order.cc'; then $(CYGPATH_W) 'Order.cc'; else $(CYGPATH_W) '$(srcdir)/Order.cc'; fi`
 
 moon-Context.o: Context.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(moon_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT moon-Context.o -MD -MP -MF $(DEPDIR)/moon-Context.Tpo -c -o moon-Context.o `test -f 'Context.cc' || echo '$(srcdir)/'`Context.cc
