@@ -11,9 +11,9 @@ Server::Server(int argc, char* argv[]) {
 
   config_.reset(new Config(argc, argv));
 
-  tick_.reset(new Tick(this,
-                         config_->options()->instru1,
-                         config_->options()->instru2));
+  tick_.reset(new Tick(this));
+
+  order_.reset(new Order(this));
 
   context_.reset(new Context(this));
 }

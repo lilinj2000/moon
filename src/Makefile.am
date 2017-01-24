@@ -3,10 +3,10 @@ AUTOMAKE_OPTIONS = foreign
 bin_PROGRAMS = moon
 moon_SOURCES = \
 	Config.cc \
-	State.cc \
-	Order.cc \
-	Context.cc \
 	Tick.cc \
+	Order.cc \
+	State.cc \
+	Context.cc \
 	Server.cc \
 	Main.cc
 

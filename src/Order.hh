@@ -12,11 +12,17 @@ namespace moon {
 
 class Server;
 
-class Order {
+class Order : public subject::ServiceCallback {
  public:
   Order(Server* server);
 
   ~Order();
+
+  // rsp order
+  virtual void onMessage(const std::string& msg);
+
+  // req order
+  void msgCallback(const std::string *);
 
   void instruOpen(const std::string& instru,
                   const std::string& direct,
@@ -42,38 +48,10 @@ protected:
  private:
   Server* server_;
 
-  class ReqOrderServiceCallback {
-   public:
-    ReqOrderServiceCallback(Order* order):
-        order_(order) {
-    }
-
-    void msgCallback(const std::string *);
-
-   private:
-    Order* order_;
-  };
-  friend class ReqOrderServiceCallback;
-  std::unique_ptr<ReqOrderServiceCallback> req_order_callback_;
+  std::unique_ptr<soil::MsgQueue<std::string, Order> > req_order_queue_;
   std::unique_ptr<zod::PushService> req_order_service_;
-  std::unique_ptr<soil::MsgQueue<std::string, ReqOrderServiceCallback> > req_order_queue_;
 
-  class RspOrderServiceCallback : public subject::ServiceCallback {
-   public:
-    RspOrderServiceCallback(Order* order):
-        order_(order) {
-    }
-
-    virtual void onMessage(const std::string& msg);
-
-   private:
-    Order* order_;
-  };
-  friend class RspOrderServiceCallback;
-  std::unique_ptr<RspOrderServiceCallback> rsp_order_callback_;
   std::unique_ptr<subject::Service> rsp_order_service_;
-  std::unique_ptr<soil::MsgQueue<std::string, RspOrderServiceCallback> > rsp_order_queue_;
-
 };
 
 }  // namespace moon

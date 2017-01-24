@@ -12,12 +12,18 @@ Order::Order(Server* server) :
     server_(server) {
   MOON_TRACE <<"Order::Order()";
 
-  req_order_callback_.reset(new ReqOrderServiceCallback(this));
-  req_order_queue_.reset(new soil::MsgQueue<std::string, ReqOrderServiceCallback>(req_order_callback_.get()));
+  req_order_queue_.reset(new soil::MsgQueue<std::string, Order>(this));
 
   req_order_service_.reset(zod::PushService::create(
       server_->config()->options()->push_addr));
 
+  std::string filter = server_->config()->options()->instru1;
+  filter += "|" + server_->config()->options()->instru2;
+  subject::Options order_options {
+    filter,
+        server_->config()->options()->order_sub_addr
+        };
+  rsp_order_service_.reset(subject::Service::createService(order_options, this));
 }
 
 Order::~Order() {
@@ -73,10 +79,17 @@ std::string Order::buildOrderMsg(
   return json::toString(doc);
 }
 
-void Order::ReqOrderServiceCallback::msgCallback(const std::string* msg) {
-  MOON_TRACE <<"Order::ReqOrderServiceCallback::msgCallback()";
+// req order
+void Order::msgCallback(const std::string* msg) {
+  MOON_TRACE <<"Order::msgCallback()";
 
-  order_->req_order_service_->sendMsg(*msg);
+  req_order_service_->sendMsg(*msg);
+}
+
+// rsp order
+void Order::onMessage(const std::string& msg) {
+  MOON_TRACE <<"Order::onMessage()";
+
 }
 
 

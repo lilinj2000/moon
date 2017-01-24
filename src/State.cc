@@ -4,6 +4,8 @@
 #include "Log.hh"
 #include "State.hh"
 #include "Context.hh"
+#include "Server.hh"
+#include "Tick.hh"
 
 namespace moon {
 
@@ -29,25 +31,25 @@ State* State::createState(StateID id, Context* context) {
 void ShortPositionInitState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"ShortPositionInitState::handleMDInfo()";
 
-  context()->basisEvent(md_instru1, md_instru2);
+  context()->server()->tick()->basisEvent(md_instru1, md_instru2);
 }
 
 void ShortPositionOpenState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"ShortPositionOpenState::handleMDInfo()";
 
-  context()->pushBasis(md_instru1, md_instru2);
+  context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 
 void PositionInitState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionInitState::handleMDInfo()";
 
-  context()->pushBasis(md_instru1, md_instru2);
+  context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 
 void PositionCloseState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionCloseState::handleMDInfo()";
 
-  context()->pushBasis(md_instru1, md_instru2);
+  context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 
 };  // namespace moon
