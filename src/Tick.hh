@@ -28,7 +28,7 @@ class Tick : public subject::ServiceCallback {
 
   virtual void onMessage(const std::string& msg);
 
-  void basisEvent(const MDInfo&, const MDInfo&);
+  bool basisEvent(const MDInfo&, const MDInfo&);
 
   void pushBasis(const MDInfo&, const MDInfo&);
 

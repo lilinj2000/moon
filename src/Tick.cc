@@ -76,8 +76,10 @@ void Tick::onMessage(const std::string& msg) {
   }
 }
 
-void Tick::basisEvent(const MDInfo& md_instru1, const MDInfo& md_instru2) {
+bool Tick::basisEvent(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"Tick::basisEvent()";
+
+  bool has_event = false;
 
   double long_basis = md_instru2.bid_price1
       - md_instru1.ask_price1;
@@ -105,6 +107,8 @@ void Tick::basisEvent(const MDInfo& md_instru1, const MDInfo& md_instru2) {
                                  sell,
                                  md_instru2.bid_price1,
                                  volume);
+
+    has_event = true;
   } else if (triggerOpen(short_basis,
                          short_basis_queue_,
                          queue_size, delta_open)) {
@@ -118,9 +122,13 @@ void Tick::basisEvent(const MDInfo& md_instru1, const MDInfo& md_instru2) {
                                  buy,
                                  md_instru2.ask_price1,
                                  volume);
+
+    has_event = true;
   }
 
   pushBasis(md_instru1, md_instru2);
+
+  return has_event;
 }
 
 bool Tick::triggerOpen(double basis,

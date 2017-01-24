@@ -30,6 +30,8 @@ class State {
     return context_;
   }
 
+  virtual void toNextState() = 0;
+
   virtual void handleMDInfo(const MDInfo&, const MDInfo&) = 0;
 
   static State* createState(StateID id, Context* context);
@@ -58,6 +60,8 @@ class ShortPositionInitState : public ShortPositionState {
   }
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
+  
+  virtual void toNextState();
 };
 
 class ShortPositionOpenState : public ShortPositionState {
@@ -70,6 +74,8 @@ class ShortPositionOpenState : public ShortPositionState {
   }
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
+
+  virtual void toNextState();
 };
 
 class PositionState : public State {
@@ -92,6 +98,8 @@ class PositionInitState : public PositionState {
   }
   
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
+
+  virtual void toNextState();
 };
 
 class PositionCloseState : public PositionState {
@@ -104,6 +112,8 @@ class PositionCloseState : public PositionState {
   }
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
+
+  virtual void toNextState();
 };
 
 };  // namespace moon

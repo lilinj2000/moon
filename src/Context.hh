@@ -25,6 +25,10 @@ class Context {
 
   void handleMDInfo(const MDInfo&, const MDInfo&);
 
+  void setStateID(StateID state_id) {
+    state_id_ = state_id;
+  }
+
  private:
   Server* server_;
 

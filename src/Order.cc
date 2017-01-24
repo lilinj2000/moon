@@ -41,6 +41,8 @@ void Order::instruOpen(const std::string& instru,
                                   instru, direct,
                                   price, volume);
   pushReqOrderMsg(new std::string(msg));
+
+  updateOrders(instru, direct, price, volume);
 }
 
 void Order::instruClose(const std::string& instru,
@@ -54,6 +56,8 @@ void Order::instruClose(const std::string& instru,
                                   instru, direct,
                                   price, volume);
   pushReqOrderMsg(new std::string(msg));
+
+  updateOrders(instru, direct, price, volume);
 }
 
 std::string Order::buildOrderMsg(
@@ -77,6 +81,18 @@ std::string Order::buildOrderMsg(
   json::addMember<const json::Value&>(&doc, "order", v_order);
 
   return json::toString(doc);
+}
+
+void Order::updateOrders(const std::string& instru,
+                         const std::string& direct,
+                         double price,
+                         int volume) {
+  MOON_TRACE <<"Order::updateOrders()";
+  
+  OrderInfo record {
+    instru, direct, price, volume, 0.0, 0
+  };
+  orders_[instru] = record;
 }
 
 // req order

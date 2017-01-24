@@ -31,7 +31,13 @@ State* State::createState(StateID id, Context* context) {
 void ShortPositionInitState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"ShortPositionInitState::handleMDInfo()";
 
-  context()->server()->tick()->basisEvent(md_instru1, md_instru2);
+  if (context()->server()->tick()->basisEvent(md_instru1, md_instru2)) {
+    toNextState();
+  }
+}
+
+void ShortPositionInitState::toNextState() {
+  context()->setStateID(STATE_SHORT_POSITION_OPEN);
 }
 
 void ShortPositionOpenState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
@@ -40,16 +46,28 @@ void ShortPositionOpenState::handleMDInfo(const MDInfo& md_instru1, const MDInfo
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 
+void ShortPositionOpenState::toNextState() {
+  context()->setStateID(STATE_POSITION_INIT);
+}
+
 void PositionInitState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionInitState::handleMDInfo()";
 
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 
+void PositionInitState::toNextState() {
+  context()->setStateID(STATE_POSITION_CLOSE);
+}
+
 void PositionCloseState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionCloseState::handleMDInfo()";
 
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
+}
+
+void PositionCloseState::toNextState() {
+  context()->setStateID(STATE_SHORT_POSITION_INIT);
 }
 
 };  // namespace moon
