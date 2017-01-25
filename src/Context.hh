@@ -25,10 +25,15 @@ class Context {
 
   void handleMDInfo(const MDInfo&, const MDInfo&);
 
+  void handleOrderInfo(const OrderInfo&);
+
   void setStateID(StateID state_id) {
     state_id_ = state_id;
   }
 
+ protected:
+  void registerState(StateID);
+  
  private:
   Server* server_;
 

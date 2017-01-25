@@ -5,16 +5,17 @@
 #define MOON_STATE_HH
 
 #include "Tick.hh"
+#include "Order.hh"
 
 namespace moon {
 
 class Context;
 
 typedef enum {
-  STATE_SHORT_POSITION_INIT = 10,
-  STATE_SHORT_POSITION_OPEN,
-  STATE_POSITION_INIT = 100,
-  STATE_POSITION_CLOSE
+  STATE_SHORT_POSITION_WITHOUT_ORDER = 10,
+  STATE_SHORT_POSITION_WITH_ORDER,
+  STATE_POSITION_WITH_ORDER = 100,
+  STATE_POSITION_WITHOUT_ORDER
 }StateID;
 
 class State {
@@ -30,9 +31,11 @@ class State {
     return context_;
   }
 
-  virtual void toNextState() = 0;
+  virtual void toNextState(StateID);
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&) = 0;
+
+  virtual void handleOrderInfo(const OrderInfo&) = 0;
 
   static State* createState(StateID id, Context* context);
 
@@ -40,80 +43,52 @@ class State {
   Context* context_;
 };
 
-class ShortPositionState : public State {
+class ShortPositionWithoutOrderState : public State {
  public:
-  ShortPositionState(Context* context):
+  ShortPositionWithoutOrderState(Context* context):
       State(context) {
   }
 
-  virtual ~ShortPositionState() {
-  }
-};
-
-class ShortPositionInitState : public ShortPositionState {
- public:
-  ShortPositionInitState(Context* context):
-      ShortPositionState(context) {
-  }
-
-  virtual ~ShortPositionInitState() {
+  virtual ~ShortPositionWithoutOrderState() {
   }
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
-  
-  virtual void toNextState();
 };
 
-class ShortPositionOpenState : public ShortPositionState {
+class ShortPositionWithOrderState : public State {
  public:
-  ShortPositionOpenState(Context* context):
-      ShortPositionState(context) {
-  }
-
-  virtual ~ShortPositionOpenState() {
-  }
-
-  virtual void handleMDInfo(const MDInfo&, const MDInfo&);
-
-  virtual void toNextState();
-};
-
-class PositionState : public State {
- public:
-  PositionState(Context* context):
+  ShortPositionWithOrderState(Context* context):
       State(context) {
   }
 
-  virtual ~PositionState() {
+  virtual ~ShortPositionWithOrderState() {
   }
+
+  virtual void handleMDInfo(const MDInfo&, const MDInfo&);
 };
 
-class PositionInitState : public PositionState {
+class PositionWithOrderState : public State {
  public:
-  PositionInitState(Context* context):
-      PositionState(context) {
+  PositionWithOrderState(Context* context):
+      State(context) {
   }
 
-  virtual ~PositionInitState() {
+  virtual ~PositionWithOrderState() {
   }
   
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
-
-  virtual void toNextState();
 };
 
-class PositionCloseState : public PositionState {
+class PositionWithoutOrderState : public State {
  public:
-  PositionCloseState(Context* context):
-      PositionState(context) {
+  PositionWithoutOrderState(Context* context):
+      State(context) {
   }
 
-  virtual ~PositionCloseState() {
+  virtual ~PositionWithoutOrderState() {
   }
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
-
-  virtual void toNextState();
 };
 
 };  // namespace moon

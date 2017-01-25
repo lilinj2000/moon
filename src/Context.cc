@@ -10,12 +10,17 @@ Context::Context(Server* server):
     server_(server) {
   MOON_TRACE <<"Context::Context()";
 
-  state_id_ = STATE_SHORT_POSITION_INIT;
-  // regist the state
-  states_[STATE_SHORT_POSITION_INIT] = State::createState(STATE_SHORT_POSITION_INIT, this);
-  states_[STATE_SHORT_POSITION_OPEN] = State::createState(STATE_SHORT_POSITION_OPEN, this);
-  states_[STATE_POSITION_INIT] = State::createState(STATE_SHORT_POSITION_OPEN, this);
-  states_[STATE_POSITION_CLOSE] = State::createState(STATE_SHORT_POSITION_OPEN, this);
+  state_id_ = STATE_SHORT_POSITION_WITHOUT_ORDER;
+  
+  // register the state
+  registerState(STATE_SHORT_POSITION_WITHOUT_ORDER);
+  registerState(STATE_SHORT_POSITION_WITH_ORDER);
+  registerState(STATE_POSITION_WITH_ORDER);
+  registerState(STATE_POSITION_WITHOUT_ORDER);
+}
+
+void Context::registerState(StateID state_id) {
+  states_[state_id] = State::createState(state_id, this);
 }
 
 void Context::handleMDInfo(const MDInfo& md_instru1,
@@ -24,6 +29,13 @@ void Context::handleMDInfo(const MDInfo& md_instru1,
 
   std::unique_lock<std::mutex> lck(state_mutex_);
   states_[state_id_]->handleMDInfo(md_instru1, md_instru2);
+}
+
+void Context::handleOrderInfo(const OrderInfo& order) {
+  MOON_TRACE <<"Context::handleOrderInfo()";
+
+  std::unique_lock<std::mutex> lck(state_mutex_);
+  states_[state_id_]->handleOrderInfo(order);
 }
 
 };  // namespace moon

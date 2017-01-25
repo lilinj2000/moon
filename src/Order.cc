@@ -42,7 +42,7 @@ void Order::instruOpen(const std::string& instru,
                                   price, volume);
   pushReqOrderMsg(new std::string(msg));
 
-  updateOrders(instru, direct, price, volume);
+  inputOrder(instru, direct, price, volume);
 }
 
 void Order::instruClose(const std::string& instru,
@@ -57,7 +57,7 @@ void Order::instruClose(const std::string& instru,
                                   price, volume);
   pushReqOrderMsg(new std::string(msg));
 
-  updateOrders(instru, direct, price, volume);
+  inputOrder(instru, direct, price, volume);
 }
 
 std::string Order::buildOrderMsg(
@@ -83,16 +83,43 @@ std::string Order::buildOrderMsg(
   return json::toString(doc);
 }
 
-void Order::updateOrders(const std::string& instru,
-                         const std::string& direct,
-                         double price,
-                         int volume) {
-  MOON_TRACE <<"Order::updateOrders()";
+void Order::inputOrder(const std::string& instru,
+                       const std::string& direct,
+                       double price,
+                       int volume) {
+  MOON_TRACE <<"Order::inputOrder()";
   
   OrderInfo record {
-    instru, direct, price, volume, 0.0, 0
+    instru, direct, price, volume,
+        "", "", "", ""
   };
   orders_[instru] = record;
+}
+
+bool Order::updateOrder(const OrderInfo& order) {
+  MOON_TRACE <<"Order::updateOrder()";
+
+  auto i_iter = orders_.find(order.instru);
+  if (i_iter != orders_.end()) {
+    i_iter->second.order_local_id = order.order_local_id;
+    i_iter->second.order_sys_id = order.order_sys_id;
+    i_iter->second.order_status = order.order_status;
+    i_iter->second.status_msg = order.status_msg;
+  } else {
+    MOON_ERROR <<"unexpected order - " <<order.instru;
+    return false;
+  }
+
+  if (order.order_status == "0") {
+    // the order all traded
+    orders_.erase(i_iter);
+  }
+
+  if (orders_.empty()) {
+    return true;
+  }
+
+  return false;
 }
 
 // req order
@@ -106,6 +133,33 @@ void Order::msgCallback(const std::string* msg) {
 void Order::onMessage(const std::string& msg) {
   MOON_TRACE <<"Order::onMessage()";
 
+  MOON_DEBUG <<msg;
+
+    json::Document doc;
+  json::fromString(msg, &doc);
+
+  auto itr = doc.MemberBegin();
+  std::string key = itr->name.GetString();
+  json::Value& data = doc[key.data()];
+
+  // OnRtnOrder
+  if (key == "OnRtnOrder") {
+    auto itr = data.FindMember("CThostFtdcOrderField");
+    if (itr != data.MemberEnd()) {
+      std::string instru = (itr->value)["InstrumentID"].GetString();
+      std::string order_local_id = (itr->value)["OrderLocalID"].GetString();
+      std::string order_sys_id = (itr->value)["OrderSysID"].GetString();
+      std::string order_status = (itr->value)["OrderStatus"].GetString();
+      std::string status_msg = (itr->value)["StatusMsg"].GetString();
+
+      OrderInfo order {
+        instru, "", 0, 0,
+            order_local_id, order_sys_id,
+            order_status, status_msg
+            };
+      server_->context()->handleOrderInfo(order);
+    }
+  }
 }
 
 
