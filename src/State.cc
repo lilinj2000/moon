@@ -43,7 +43,7 @@ void ShortPositionWithoutOrderState::handleMDInfo(const MDInfo& md_instru1, cons
 void ShortPositionWithoutOrderState::handleOrderInfo(const OrderInfo& order) {
   MOON_TRACE <<"ShortPositionWithoutOrderState::handleOrderInfo()";
 
-  MOON_ERROR <<"Error, unexpected order happened.";
+  MOON_ERROR <<"State short position without order, should be no order happened.  instru: " <<order.instru;
 }
 
 void ShortPositionWithOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
@@ -55,8 +55,12 @@ void ShortPositionWithOrderState::handleMDInfo(const MDInfo& md_instru1, const M
 void ShortPositionWithOrderState::handleOrderInfo(const OrderInfo& order) {
   MOON_TRACE <<"ShortPositionWithOrderState::handleOrderInfo()";
 
-  if (context()->server()->order()->updateOrder(order)) {
+  int ret = context()->server()->order()->updateOrder(order);
+
+  if (2 == ret) {
     toNextState(STATE_POSITION_WITHOUT_ORDER);
+  } else if (3 == ret) {
+    toNextState(STATE_SHORT_POSITION_WITHOUT_ORDER);
   }
 }
 
@@ -66,10 +70,29 @@ void PositionWithOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 
+void PositionWithOrderState::handleOrderInfo(const OrderInfo& order) {
+  MOON_TRACE <<"PositionWithOrderState::handleOrderInfo()";
+
+  int ret = context()->server()->order()->updateOrder(order);
+
+  if (2 == ret) {
+    toNextState(STATE_POSITION_WITHOUT_ORDER);
+  } else if (3 == ret) {
+    toNextState(STATE_SHORT_POSITION_WITHOUT_ORDER);
+  }
+}
+
+
 void PositionWithoutOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionWithoutOrderState::handleMDInfo()";
 
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
+}
+
+void PositionWithoutOrderState::handleOrderInfo(const OrderInfo& order) {
+  MOON_TRACE <<"PositionWithOrderState::handleOrderInfo()";
+  
+  MOON_ERROR <<"State position without order, should be no order happened.  instru: " <<order.instru;
 }
 
 };  // namespace moon

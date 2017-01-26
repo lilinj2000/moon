@@ -29,10 +29,14 @@ typedef struct {
   std::string direct;
   double price;
   int volume;
-}PositionInfo;
+  std::string offset_flag;
+  std::string trade_id;
+  std::string order_sys_id;
+  std::string order_local_id;
+}TradeInfo;
 
 typedef std::map<std::string, OrderInfo> OrdersType;
-typedef std::map<std::string, PositionInfo> PositionsType;
+typedef std::map<std::string, TradeInfo> PositionsType;
 
 class Order : public subject::ServiceCallback {
  public:
@@ -56,7 +60,15 @@ class Order : public subject::ServiceCallback {
                    double price,
                    int volume);
 
-  bool updateOrder(const OrderInfo& order);
+
+  // @ret
+  //  0: not updated
+  //  1: order updated
+  //  2: all orders removed, and with position
+  //  3: all orders removed, and without position
+  int updateOrder(const OrderInfo& order);
+
+  int updatePosition(const TradeInfo& trade);
 
 protected:
   void pushReqOrderMsg(std::string* msg) {

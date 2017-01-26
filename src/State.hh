@@ -37,6 +37,8 @@ class State {
 
   virtual void handleOrderInfo(const OrderInfo&) = 0;
 
+  virtual void handleTradeInfo(const TradeInfo&) = 0;
+
   static State* createState(StateID id, Context* context);
 
  private:
@@ -53,6 +55,8 @@ class ShortPositionWithoutOrderState : public State {
   }
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
+
+  virtual void handleOrderInfo(const OrderInfo&);
 };
 
 class ShortPositionWithOrderState : public State {
@@ -65,6 +69,8 @@ class ShortPositionWithOrderState : public State {
   }
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
+
+  virtual void handleOrderInfo(const OrderInfo&);
 };
 
 class PositionWithOrderState : public State {
@@ -77,6 +83,8 @@ class PositionWithOrderState : public State {
   }
   
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
+
+  virtual void handleOrderInfo(const OrderInfo&);
 };
 
 class PositionWithoutOrderState : public State {
@@ -89,6 +97,8 @@ class PositionWithoutOrderState : public State {
   }
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
+
+  virtual void handleOrderInfo(const OrderInfo&);
 };
 
 };  // namespace moon

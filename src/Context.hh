@@ -27,6 +27,8 @@ class Context {
 
   void handleOrderInfo(const OrderInfo&);
 
+  void handleTradeInfo(const TradeInfo&);
+
   void setStateID(StateID state_id) {
     state_id_ = state_id;
   }

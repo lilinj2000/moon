@@ -38,4 +38,11 @@ void Context::handleOrderInfo(const OrderInfo& order) {
   states_[state_id_]->handleOrderInfo(order);
 }
 
+void Context::handleTradeInfo(const TradeInfo& trade) {
+  MOON_TRACE <<"Context::handleTradeInfo()";
+
+  std::unique_lock<std::mutex> lck(state_mutex_);
+  states_[state_id_]->handleTradeInfo(trade);
+}
+
 };  // namespace moon

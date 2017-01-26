@@ -96,7 +96,7 @@ void Order::inputOrder(const std::string& instru,
   orders_[instru] = record;
 }
 
-bool Order::updateOrder(const OrderInfo& order) {
+int Order::updateOrder(const OrderInfo& order) {
   MOON_TRACE <<"Order::updateOrder()";
 
   auto i_iter = orders_.find(order.instru);
@@ -107,7 +107,7 @@ bool Order::updateOrder(const OrderInfo& order) {
     i_iter->second.status_msg = order.status_msg;
   } else {
     MOON_ERROR <<"unexpected order - " <<order.instru;
-    return false;
+    return 0;
   }
 
   if (order.order_status == "0") {
@@ -116,11 +116,36 @@ bool Order::updateOrder(const OrderInfo& order) {
   }
 
   if (orders_.empty()) {
-    return true;
+    if (positions_.empty()) {
+      return 3;
+    }
+
+    return 2;
   }
 
-  return false;
+  return 1;
 }
+
+int Order::updatePosition(const TradeInfo& trade) {
+  MOON_TRACE <<"Order::updatePosition()";
+
+  auto i_iter = positions_.find(trade.instru);
+  if (i_iter != positions_.end()) {
+    if (trade.offset_flag == "3"
+        || trade.offset_flag == "1") {  // close
+      positions_.erase(i_iter);
+    } else {
+      MOON_ERROR <<"unexpected trade - " <<trade.instru;
+    }
+  } else {
+    if (trade.offset_flag == "0")  // open
+      positions_[trade.instru] = trade;
+    }
+  }
+
+}
+
+
 
 // req order
 void Order::msgCallback(const std::string* msg) {
@@ -129,13 +154,13 @@ void Order::msgCallback(const std::string* msg) {
   req_order_service_->sendMsg(*msg);
 }
 
-// rsp order
+// rtn order && trade
 void Order::onMessage(const std::string& msg) {
   MOON_TRACE <<"Order::onMessage()";
 
   MOON_DEBUG <<msg;
 
-    json::Document doc;
+  json::Document doc;
   json::fromString(msg, &doc);
 
   auto itr = doc.MemberBegin();
@@ -159,7 +184,28 @@ void Order::onMessage(const std::string& msg) {
             };
       server_->context()->handleOrderInfo(order);
     }
+  } else if (key == "OnRtnTrade") {
+    auto itr = data.FindMember("CThostFtdcTradeField");
+    if (itr != data.MemberEnd()) {
+      std::string instru = (itr->value)["InstrumentID"].GetString();
+      std::string direct = (itr->value)["Direction"].GetString();
+      double price = std::stod((itr->value)["Price"].GetString());
+      int volume = std::stoi((itr->value)["Volume"].GetString());
+      std::string offset_flag = (itr->value)["OffsetFlag"].GetString();
+      std::string trade_id = (itr->value)["TradeID"].GetString();
+      std::string order_sys_id = (itr->value)["OrderSysID"].GetString();
+      std::string order_local_id = (itr->value)["OrderLocalID"].GetString();
+
+
+      TradeInfo trade {
+        instru, direct, price, volume,
+            offset_flag, trade_id,
+            order_sys_id, order_local_id
+            };
+      server_->context()->handleTradeInfo(trade);
+    }
   }
+
 }
 
 
