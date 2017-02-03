@@ -138,13 +138,24 @@ int Order::updatePosition(const TradeInfo& trade) {
       MOON_ERROR <<"unexpected trade - " <<trade.instru;
     }
   } else {
-    if (trade.offset_flag == "0")  // open
+    if (trade.offset_flag == "0")  {// open
       positions_[trade.instru] = trade;
+
+      if (orders_.empty()) {
+        return 2;
+      } else {
+        return 1;
+      }
     }
   }
 
-}
+  if (positions_.empty()) {
+    return 4;
+  } else {
+    return 3;
+  }
 
+}
 
 
 // req order
@@ -195,7 +206,6 @@ void Order::onMessage(const std::string& msg) {
       std::string trade_id = (itr->value)["TradeID"].GetString();
       std::string order_sys_id = (itr->value)["OrderSysID"].GetString();
       std::string order_local_id = (itr->value)["OrderLocalID"].GetString();
-
 
       TradeInfo trade {
         instru, direct, price, volume,

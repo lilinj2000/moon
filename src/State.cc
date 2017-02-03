@@ -46,6 +46,12 @@ void ShortPositionWithoutOrderState::handleOrderInfo(const OrderInfo& order) {
   MOON_ERROR <<"State short position without order, should be no order happened.  instru: " <<order.instru;
 }
 
+void ShortPositionWithoutOrderState::handleTradeInfo(const TradeInfo& trade) {
+  MOON_TRACE <<"ShortPositionWithoutOrderState::handleTradeInfo()";
+
+  MOON_ERROR <<"State short position without order, should be no trade happened.  instru: " <<trade.instru;
+}
+
 void ShortPositionWithOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"ShortPositionWithOrderState::handleMDInfo()";
 
@@ -64,10 +70,38 @@ void ShortPositionWithOrderState::handleOrderInfo(const OrderInfo& order) {
   }
 }
 
+void ShortPositionWithOrderState::handleTradeInfo(const TradeInfo& trade) {
+  MOON_TRACE <<"ShortPositionWithOrderState::handleTradeInfo()";
+
+  int ret = context()->server()->order()->updatePosition(trade);
+
+  MOON_DEBUG <<"State short position with order, return code of update position: " <<ret;
+
+  if (1 == ret) {
+    toNextState(STATE_POSITION_WITH_ORDER);
+  } else if (2 == ret) {
+    toNextState(STATE_POSITION_WITHOUT_ORDER);
+  }
+}
+
 void PositionWithOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionWithOrderState::handleMDInfo()";
 
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
+}
+
+void PositionWithOrderState::handleTradeInfo(const TradeInfo& trade) {
+  MOON_TRACE <<"PositionWithOrderState::handleTradeInfo()";
+
+  int ret = context()->server()->order()->updatePosition(trade);
+
+  MOON_DEBUG <<"State position with order, return code of update position: " <<ret;
+
+  if (4 == ret) {
+    toNextState(STATE_SHORT_POSITION_WITHOUT_ORDER);
+  } else if (2 == ret) {
+    toNextState(STATE_POSITION_WITHOUT_ORDER);
+  }
 }
 
 void PositionWithOrderState::handleOrderInfo(const OrderInfo& order) {
@@ -82,7 +116,6 @@ void PositionWithOrderState::handleOrderInfo(const OrderInfo& order) {
   }
 }
 
-
 void PositionWithoutOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionWithoutOrderState::handleMDInfo()";
 
@@ -94,5 +127,12 @@ void PositionWithoutOrderState::handleOrderInfo(const OrderInfo& order) {
   
   MOON_ERROR <<"State position without order, should be no order happened.  instru: " <<order.instru;
 }
+
+void PositionWithoutOrderState::handleTradeInfo(const TradeInfo& trade) {
+  MOON_TRACE <<"PositionWithoutOrderState::handleTradeInfo()";
+
+  MOON_ERROR <<"State position without order, should be no trade happened.  instru: " <<trade.instru;
+}
+
 
 };  // namespace moon

@@ -68,6 +68,11 @@ class Order : public subject::ServiceCallback {
   //  3: all orders removed, and without position
   int updateOrder(const OrderInfo& order);
 
+  // @ret
+  // 1: trade open, with order
+  // 2: trade open, without order
+  // 3: trade close, and with position, and with order
+  // 4: trade close, and without position, and without order
   int updatePosition(const TradeInfo& trade);
 
 protected:
