@@ -4,6 +4,7 @@
 #ifndef MOON_TICK_HH
 #define MOON_TICK_HH
 
+#include <string>
 #include <deque>
 #include "subject/Service.hh"
 
@@ -22,7 +23,7 @@ typedef struct {
 
 class Tick : public subject::ServiceCallback {
  public:
-  Tick(Server *);
+  explicit Tick(Server* server);
 
   ~Tick();
 
@@ -51,7 +52,7 @@ class Tick : public subject::ServiceCallback {
   BasisQueue long_basis_queue_;
   BasisQueue short_basis_queue_;
 };
-  
-} // namespace moon
+
+}  // namespace moon
 
 #endif

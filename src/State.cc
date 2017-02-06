@@ -10,7 +10,7 @@
 namespace moon {
 
 State* State::createState(StateID id, Context* context) {
-  switch(id) {
+  switch (id) {
     case STATE_SHORT_POSITION_WITHOUT_ORDER:
       return new ShortPositionWithoutOrderState(context);
 
@@ -29,10 +29,44 @@ State* State::createState(StateID id, Context* context) {
 }
 
 void State::toNextState(StateID state_id) {
+  MOON_TRACE <<"State::toNextState()";
+
   context_->setStateID(state_id);
 }
 
-void ShortPositionWithoutOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
+void State::toNextState(int id) {
+  MOON_TRACE <<"State::toNextState()";
+
+  StateID state_id;
+  switch (id) {
+    case 1:
+      state_id = STATE_SHORT_POSITION_WITHOUT_ORDER;
+      break;
+
+    case 2:
+      state_id = STATE_SHORT_POSITION_WITH_ORDER;
+      break;
+
+    case 3:
+      state_id = STATE_POSITION_WITH_ORDER;
+      break;
+
+    case 4:
+      state_id = STATE_POSITION_WITHOUT_ORDER;
+      break;
+
+    default:
+      std::string msg = "invalid state id "
+          + std::to_string(id);
+      throw std::runtime_error(msg);
+  }
+
+  toNextState(state_id);
+}
+
+void ShortPositionWithoutOrderState::handleMDInfo(
+    const MDInfo& md_instru1,
+    const MDInfo& md_instru2) {
   MOON_TRACE <<"ShortPositionWithoutOrderState::handleMDInfo()";
 
   if (context()->server()->tick()->basisEvent(md_instru1, md_instru2)) {
@@ -43,16 +77,20 @@ void ShortPositionWithoutOrderState::handleMDInfo(const MDInfo& md_instru1, cons
 void ShortPositionWithoutOrderState::handleOrderInfo(const OrderInfo& order) {
   MOON_TRACE <<"ShortPositionWithoutOrderState::handleOrderInfo()";
 
-  MOON_ERROR <<"State short position without order, should be no order happened.  instru: " <<order.instru;
+  MOON_ERROR <<"State short position without order, "
+             <<"should be no order happened.  instru: "
+             <<order.instru;
 }
 
 void ShortPositionWithoutOrderState::handleTradeInfo(const TradeInfo& trade) {
   MOON_TRACE <<"ShortPositionWithoutOrderState::handleTradeInfo()";
 
-  MOON_ERROR <<"State short position without order, should be no trade happened.  instru: " <<trade.instru;
+  toNextState(context()->server()->order()->updatePosition(trade));
 }
 
-void ShortPositionWithOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
+void ShortPositionWithOrderState::handleMDInfo(
+    const MDInfo& md_instru1,
+    const MDInfo& md_instru2) {
   MOON_TRACE <<"ShortPositionWithOrderState::handleMDInfo()";
 
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
@@ -61,78 +99,56 @@ void ShortPositionWithOrderState::handleMDInfo(const MDInfo& md_instru1, const M
 void ShortPositionWithOrderState::handleOrderInfo(const OrderInfo& order) {
   MOON_TRACE <<"ShortPositionWithOrderState::handleOrderInfo()";
 
-  int ret = context()->server()->order()->updateOrder(order);
-
-  if (2 == ret) {
-    toNextState(STATE_POSITION_WITHOUT_ORDER);
-  } else if (3 == ret) {
-    toNextState(STATE_SHORT_POSITION_WITHOUT_ORDER);
-  }
+  toNextState(context()->server()->order()->updateOrder(order));
 }
 
 void ShortPositionWithOrderState::handleTradeInfo(const TradeInfo& trade) {
   MOON_TRACE <<"ShortPositionWithOrderState::handleTradeInfo()";
 
-  int ret = context()->server()->order()->updatePosition(trade);
-
-  MOON_DEBUG <<"State short position with order, return code of update position: " <<ret;
-
-  if (1 == ret) {
-    toNextState(STATE_POSITION_WITH_ORDER);
-  } else if (2 == ret) {
-    toNextState(STATE_POSITION_WITHOUT_ORDER);
-  }
+  toNextState(context()->server()->order()->updatePosition(trade));
 }
 
-void PositionWithOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
+void PositionWithOrderState::handleMDInfo(
+    const MDInfo& md_instru1,
+    const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionWithOrderState::handleMDInfo()";
 
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 
-void PositionWithOrderState::handleTradeInfo(const TradeInfo& trade) {
-  MOON_TRACE <<"PositionWithOrderState::handleTradeInfo()";
-
-  int ret = context()->server()->order()->updatePosition(trade);
-
-  MOON_DEBUG <<"State position with order, return code of update position: " <<ret;
-
-  if (4 == ret) {
-    toNextState(STATE_SHORT_POSITION_WITHOUT_ORDER);
-  } else if (2 == ret) {
-    toNextState(STATE_POSITION_WITHOUT_ORDER);
-  }
-}
-
 void PositionWithOrderState::handleOrderInfo(const OrderInfo& order) {
   MOON_TRACE <<"PositionWithOrderState::handleOrderInfo()";
 
-  int ret = context()->server()->order()->updateOrder(order);
-
-  if (2 == ret) {
-    toNextState(STATE_POSITION_WITHOUT_ORDER);
-  } else if (3 == ret) {
-    toNextState(STATE_SHORT_POSITION_WITHOUT_ORDER);
-  }
+  toNextState(context()->server()->order()->updateOrder(order));
 }
 
-void PositionWithoutOrderState::handleMDInfo(const MDInfo& md_instru1, const MDInfo& md_instru2) {
-  MOON_TRACE <<"PositionWithoutOrderState::handleMDInfo()";
+void PositionWithOrderState::handleTradeInfo(const TradeInfo& trade) {
+  MOON_TRACE <<"PositionWithOrderState::handleTradeInfo()";
 
+  toNextState(context()->server()->order()->updatePosition(trade));
+}
+
+void PositionWithoutOrderState::handleMDInfo(
+    const MDInfo& md_instru1,
+    const MDInfo& md_instru2) {
+  MOON_TRACE <<"PositionWithoutOrderState::handleMDInfo()";
+  // to do
+  //  decide whether trigger close and update md info
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 
 void PositionWithoutOrderState::handleOrderInfo(const OrderInfo& order) {
   MOON_TRACE <<"PositionWithOrderState::handleOrderInfo()";
-  
-  MOON_ERROR <<"State position without order, should be no order happened.  instru: " <<order.instru;
+
+  MOON_ERROR <<"State position without order, "
+             <<"should be no order happened.  instru: "
+             <<order.instru;
 }
 
 void PositionWithoutOrderState::handleTradeInfo(const TradeInfo& trade) {
   MOON_TRACE <<"PositionWithoutOrderState::handleTradeInfo()";
 
-  MOON_ERROR <<"State position without order, should be no trade happened.  instru: " <<trade.instru;
+  toNextState(context()->server()->order()->updatePosition(trade));
 }
-
 
 };  // namespace moon

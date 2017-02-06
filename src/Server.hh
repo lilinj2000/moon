@@ -29,7 +29,7 @@ class Server {
   Order* order() {
     return order_.get();
   }
-  
+
   Context* context() {
     return context_.get();
   }

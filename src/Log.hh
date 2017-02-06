@@ -1,3 +1,6 @@
+// Copyright (c) 2010
+// All rights reserved.
+
 #ifndef MOON_LOG_HH
 #define MOON_LOG_HH
 

@@ -11,7 +11,7 @@ Context::Context(Server* server):
   MOON_TRACE <<"Context::Context()";
 
   state_id_ = STATE_SHORT_POSITION_WITHOUT_ORDER;
-  
+
   // register the state
   registerState(STATE_SHORT_POSITION_WITHOUT_ORDER);
   registerState(STATE_SHORT_POSITION_WITH_ORDER);
@@ -43,6 +43,18 @@ void Context::handleTradeInfo(const TradeInfo& trade) {
 
   std::unique_lock<std::mutex> lck(state_mutex_);
   states_[state_id_]->handleTradeInfo(trade);
+}
+
+void Context::setStateID(StateID state_id) {
+  MOON_TRACE <<"Context::setStateID()";
+
+  if (state_id != state_id_) {
+    MOON_DEBUG <<"======= state changed: "
+               <<state_id_ <<" ----> "
+               <<state_id;
+
+    state_id_ = state_id;
+  }
 }
 
 };  // namespace moon

@@ -20,7 +20,7 @@ typedef enum {
 
 class State {
  public:
-  State(Context* context):
+  explicit State(Context* context):
       context_(context) {
   }
 
@@ -32,6 +32,8 @@ class State {
   }
 
   virtual void toNextState(StateID);
+
+  virtual void toNextState(int id);
 
   virtual void handleMDInfo(const MDInfo&, const MDInfo&) = 0;
 
@@ -47,7 +49,7 @@ class State {
 
 class ShortPositionWithoutOrderState : public State {
  public:
-  ShortPositionWithoutOrderState(Context* context):
+  explicit ShortPositionWithoutOrderState(Context* context):
       State(context) {
   }
 
@@ -63,7 +65,7 @@ class ShortPositionWithoutOrderState : public State {
 
 class ShortPositionWithOrderState : public State {
  public:
-  ShortPositionWithOrderState(Context* context):
+  explicit ShortPositionWithOrderState(Context* context):
       State(context) {
   }
 
@@ -79,13 +81,13 @@ class ShortPositionWithOrderState : public State {
 
 class PositionWithOrderState : public State {
  public:
-  PositionWithOrderState(Context* context):
+  explicit PositionWithOrderState(Context* context):
       State(context) {
   }
 
   virtual ~PositionWithOrderState() {
   }
-  
+
   virtual void handleMDInfo(const MDInfo&, const MDInfo&);
 
   virtual void handleOrderInfo(const OrderInfo&);
@@ -95,7 +97,7 @@ class PositionWithOrderState : public State {
 
 class PositionWithoutOrderState : public State {
  public:
-  PositionWithoutOrderState(Context* context):
+  explicit PositionWithoutOrderState(Context* context):
       State(context) {
   }
 

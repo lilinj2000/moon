@@ -23,7 +23,9 @@ Order::Order(Server* server) :
     filter,
         server_->config()->options()->order_sub_addr
         };
-  rsp_order_service_.reset(subject::Service::createService(order_options, this));
+  rsp_order_service_.reset(
+      subject::Service::createService(
+          order_options, this));
 }
 
 Order::~Order() {
@@ -72,11 +74,21 @@ std::string Order::buildOrderMsg(
 
   json::Value v_order;
   json::addMember<const std::string&>(&v_order, "direct", direct, &doc);
-  json::addMember<const std::string&>(&v_order, "offset_flag", offset_flag, &doc);
-  json::addMember<const std::string&>(&v_order, "hedge_flag", "1", &doc);
-  json::addMember<const std::string&>(&v_order, "instru", instru, &doc);
-  json::addMember<const std::string&>(&v_order, "price", std::to_string(price), &doc);
-  json::addMember<const std::string&>(&v_order, "volume", std::to_string(volume), &doc);
+  json::addMember<const std::string&>(&v_order,
+                                      "offset_flag",
+                                      offset_flag, &doc);
+  json::addMember<const std::string&>(&v_order,
+                                      "hedge_flag",
+                                      "1", &doc);
+  json::addMember<const std::string&>(&v_order,
+                                      "instru",
+                                      instru, &doc);
+  json::addMember<const std::string&>(&v_order,
+                                      "price",
+                                      std::to_string(price), &doc);
+  json::addMember<const std::string&>(&v_order,
+                                      "volume",
+                                      std::to_string(volume), &doc);
 
   json::addMember<const json::Value&>(&doc, "order", v_order);
 
@@ -88,7 +100,7 @@ void Order::inputOrder(const std::string& instru,
                        double price,
                        int volume) {
   MOON_TRACE <<"Order::inputOrder()";
-  
+
   OrderInfo record {
     instru, direct, price, volume,
         "", "", "", ""
@@ -107,7 +119,6 @@ int Order::updateOrder(const OrderInfo& order) {
     i_iter->second.status_msg = order.status_msg;
   } else {
     MOON_ERROR <<"unexpected order - " <<order.instru;
-    return 0;
   }
 
   if (order.order_status == "0") {
@@ -115,15 +126,7 @@ int Order::updateOrder(const OrderInfo& order) {
     orders_.erase(i_iter);
   }
 
-  if (orders_.empty()) {
-    if (positions_.empty()) {
-      return 3;
-    }
-
-    return 2;
-  }
-
-  return 1;
+  return state();
 }
 
 int Order::updatePosition(const TradeInfo& trade) {
@@ -138,23 +141,29 @@ int Order::updatePosition(const TradeInfo& trade) {
       MOON_ERROR <<"unexpected trade - " <<trade.instru;
     }
   } else {
-    if (trade.offset_flag == "0")  {// open
+    if (trade.offset_flag == "0")  {  // open
       positions_[trade.instru] = trade;
-
-      if (orders_.empty()) {
-        return 2;
-      } else {
-        return 1;
-      }
     }
   }
 
-  if (positions_.empty()) {
-    return 4;
-  } else {
-    return 3;
-  }
+  return state();
+}
 
+int Order::state() {
+  MOON_TRACE <<"Order::state()";
+
+  bool short_position = positions_.empty();
+  bool without_order = orders_.empty();
+
+  if (short_position && without_order) {
+    return 1;
+  } else if (short_position && !without_order) {
+    return 2;
+  } else if (!short_position && !without_order) {
+    return 3;
+  } else {
+    return 4;
+  }
 }
 
 
@@ -215,7 +224,6 @@ void Order::onMessage(const std::string& msg) {
       server_->context()->handleTradeInfo(trade);
     }
   }
-
 }
 
 

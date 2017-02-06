@@ -68,7 +68,6 @@ void Tick::onMessage(const std::string& msg) {
 
       if (!md_instru1_->time_stamp.empty()
           && !md_instru2_->time_stamp.empty()) {
-
         server_->context()->handleMDInfo(*md_instru1_,
                                         *md_instru2_);
       }
@@ -168,9 +167,7 @@ void Tick::pushBasis(const MDInfo& md_instru1, const MDInfo& md_instru2) {
   while (short_basis_queue_.size() >= basis_queue_size) {
     short_basis_queue_.pop_front();
   }
-  
   long_basis_queue_.push_back(long_basis);
-
   short_basis_queue_.push_back(short_basis);
 }
 

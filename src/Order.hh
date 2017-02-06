@@ -4,6 +4,7 @@
 #ifndef MOON_ORDER_HH
 #define MOON_ORDER_HH
 
+#include <string>
 #include <map>
 #include "soil/MsgQueue.hh"
 #include "subject/Service.hh"
@@ -40,7 +41,7 @@ typedef std::map<std::string, TradeInfo> PositionsType;
 
 class Order : public subject::ServiceCallback {
  public:
-  Order(Server* server);
+  explicit Order(Server* server);
 
   ~Order();
 
@@ -62,20 +63,20 @@ class Order : public subject::ServiceCallback {
 
 
   // @ret
-  //  0: not updated
-  //  1: order updated
-  //  2: all orders removed, and with position
-  //  3: all orders removed, and without position
+  //  1: all orders removed, short position without order
+  //  2: order updated, short position with order
+  //  3: order updated, position with order
+  //  4: all orders removed, position without order
   int updateOrder(const OrderInfo& order);
 
   // @ret
-  // 1: trade open, with order
-  // 2: trade open, without order
-  // 3: trade close, and with position, and with order
-  // 4: trade close, and without position, and without order
+  // 1: trade close, short position without order
+  // 2: trade close, short position with order
+  // 3: trade open or close, position with order
+  // 4: trade open or close, position without order
   int updatePosition(const TradeInfo& trade);
 
-protected:
+ protected:
   void pushReqOrderMsg(std::string* msg) {
     req_order_queue_->pushMsg(msg);
   }
@@ -91,6 +92,13 @@ protected:
                  const std::string& direct,
                  double price,
                  int volume);
+
+  // @ret
+  // 1: short position without order
+  // 2: short position with order
+  // 3: position with order
+  // 4: position without order
+  int state();
 
  private:
   Server* server_;

@@ -14,7 +14,7 @@ class Server;
 
 class Context {
  public:
-  Context(Server* server);
+  explicit Context(Server* server);
 
   ~Context() {
   }
@@ -29,13 +29,11 @@ class Context {
 
   void handleTradeInfo(const TradeInfo&);
 
-  void setStateID(StateID state_id) {
-    state_id_ = state_id;
-  }
+  void setStateID(StateID state_id);
 
  protected:
   void registerState(StateID);
-  
+
  private:
   Server* server_;
 
