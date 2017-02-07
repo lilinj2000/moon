@@ -9,6 +9,7 @@
 #include "soil/MsgQueue.hh"
 #include "subject/Service.hh"
 #include "zod/PushService.hh"
+#include "Tick.hh"
 
 namespace moon {
 
@@ -60,6 +61,9 @@ class Order : public subject::ServiceCallback {
                    const std::string& direct,
                    double price,
                    int volume);
+
+  int calProfit(const MDInfo&,
+                const MDInfo&);
 
 
   // @ret

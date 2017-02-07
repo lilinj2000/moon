@@ -166,6 +166,12 @@ int Order::state() {
   }
 }
 
+int Order::calProfit(const MDInfo& md_instru1,
+                     const MDInfo& md_instru2) {
+  MOON_TRACE <<"Order::calProfit()";
+
+  return 0;
+}
 
 // req order
 void Order::msgCallback(const std::string* msg) {

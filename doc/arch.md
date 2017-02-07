@@ -15,8 +15,8 @@ Classes
 --------
 
 Server  .--------> Config   .------> Options
-        .--------> Tick
-        .--------> Order
+        .--------> Tick  ------------->|
+        .--------> Order <------------>|
         .--------> Context  .------> State
 
 Threads
