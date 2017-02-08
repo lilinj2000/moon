@@ -1,22 +1,22 @@
 
 States list
 -----------
-1. short_postion_without_order
+1. short\_postion\_without\_order
 
-2. short_postion_with_order
+2. short\_postion\_with\_order
 
-3. position_with_order
+3. position\_with\_order
 
-4. position_without_order
+4. position\_without\_order
 
 1st: trigger open position
     trigger open       part order be traded	   all orders be traded
 1  --------------> 2   ---------------------> 3   ---------------------->4
                       | all orders be traded without postion      rtn trade
                        --------------------------------------> 1 ------------> 4
-1: receive md, 
-   decide whether trigger open position, 
-       if open position happened, the state will be changed to 2
+1: receive md,   
+   decide whether trigger open position,   
+       if open position happened, the state will be changed to 2   
    then, update md info
 1: should no rtn order
 1: receive rtn trade with position, the state will be changed to 4

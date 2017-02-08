@@ -19,6 +19,7 @@ Options::Options():
        "instrument 1")
       ("moon.instru2", po::value<std::string>(&instru2),
        "instrument 2")
+
       ("moon.tick_sub_addr", po::value<std::string>(&tick_sub_addr),
        "tick sub address")
       ("moon.order_sub_addr", po::value<std::string>(&order_sub_addr),

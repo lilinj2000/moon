@@ -62,7 +62,7 @@ class Order : public subject::ServiceCallback {
                    double price,
                    int volume);
 
-  int calProfit(const MDInfo&,
+  double calProfit(const MDInfo&,
                 const MDInfo&);
 
 

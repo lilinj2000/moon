@@ -1,16 +1,16 @@
++ process state correctly
+   - position\_without\_order code,  
+     how to trigger close position
 
-1. process state correctly
-1.5 position_without_order code, 
-    how to trigger close position
++ record profit information, and output report finally
 
-2. record profit information, and output report finally
++ md, rtn order, rtn trade, should be stored in db.
 
-3. md, rtn order, rtn trade, should be stored in db.
++ support the parameter be read from db
 
-4. support the parameter be read from db
++ web interface
 
-10. web interface
++ ci integration, auto deployment, and smoke test
 
-20. ci integration, auto deployment, and smoke test
++ auto set the paramete value by the current md data analysis, for getting the max profit
 
-30. auto set the paramete value by the current md data analysis, for getting the max profit

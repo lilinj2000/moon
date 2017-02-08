@@ -166,11 +166,54 @@ int Order::state() {
   }
 }
 
-int Order::calProfit(const MDInfo& md_instru1,
+double Order::calProfit(const MDInfo& md_instru1,
                      const MDInfo& md_instru2) {
   MOON_TRACE <<"Order::calProfit()";
 
-  return 0;
+  double volume_multiple = server_->config()->options()->volume_multiple;
+  double fee_per_volume = server_->config()->options()->fee_per_volume;
+  double fee_per_money = server_->config()->options()->fee_per_money;
+
+  const std::string buy = "0";
+  const std::string sell = "1";
+
+  double profit = 0.0;
+  for (const auto& position : positions_) {
+    double last_price = 0;
+
+    if (position.second.direct == buy) {
+      last_price = md_instru1.bid_price1;
+      if (position.first == md_instru2.instru) {
+        last_price = md_instru2.bid_price1;
+      }
+      
+      profit += (last_price - position.second.price)
+          * position.second.volume
+          * volume_multiple;
+
+    } else if (position.second.direct == sell) {
+      last_price = md_instru1.ask_price1;
+      if (position.first == md_instru2.instru) {
+        last_price = md_instru2.ask_price1;
+      }
+
+      profit += (position.second.price - last_price)
+          * position.second.volume
+          * volume_multiple;
+    }
+
+    // calculate fee
+    if (fee_per_volume > 0) {
+      profit -= position.second.volume
+          * fee_per_volume * 2;
+    } else if (fee_per_money > 0) {
+      profit -= (last_price + position.second.price)
+          * position.second.volume
+          * volume_multiple * fee_per_money;
+    }
+  }
+
+  return profit;
 }
 
 // req order
