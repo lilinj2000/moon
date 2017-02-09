@@ -51,7 +51,8 @@ void Context::setStateID(StateID state_id) {
   if (state_id != state_id_) {
     MOON_DEBUG <<"======= state changed: "
                <<state_id_ <<" ----> "
-               <<state_id;
+               <<state_id
+               <<" =======";
 
     state_id_ = state_id;
   }

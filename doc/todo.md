@@ -1,12 +1,12 @@
-+ process state correctly
-   - position\_without\_order code,  
-     how to trigger close position
++ start debug program
 
 + record profit information, and output report finally
 
 + md, rtn order, rtn trade, should be stored in db.
 
 + support the parameter be read from db
+
++ re-structure the code for support the unit test
 
 + web interface
 

@@ -132,8 +132,12 @@ void PositionWithoutOrderState::handleMDInfo(
     const MDInfo& md_instru1,
     const MDInfo& md_instru2) {
   MOON_TRACE <<"PositionWithoutOrderState::handleMDInfo()";
-  // to do
-  //  decide whether trigger close and update md info
+
+  if (context()->server()->order()->closePositionEvent(
+          md_instru1, md_instru2)) {
+    toNextState(STATE_POSITION_WITH_ORDER);
+  }
+
   context()->server()->tick()->pushBasis(md_instru1, md_instru2);
 }
 

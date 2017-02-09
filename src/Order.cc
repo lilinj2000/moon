@@ -186,7 +186,7 @@ double Order::calProfit(const MDInfo& md_instru1,
       if (position.first == md_instru2.instru) {
         last_price = md_instru2.bid_price1;
       }
-      
+
       profit += (last_price - position.second.price)
           * position.second.volume
           * volume_multiple;
@@ -214,6 +214,56 @@ double Order::calProfit(const MDInfo& md_instru1,
   }
 
   return profit;
+}
+
+bool Order::closePositionEvent(const MDInfo& md_instru1,
+                               const MDInfo& md_instru2) {
+  MOON_TRACE <<"Order::closePositionEvent()";
+
+  const std::string buy = "0";
+  const std::string sell = "1";
+
+  double profit_close = server_->config()->options()->profit_close;
+
+  double profit = calProfit(md_instru1, md_instru2);
+
+  MOON_DEBUG <<"=== profit: "
+             <<profit <<","
+             <<" profit_close: "
+             <<profit_close
+             <<" ===";
+
+  if (profit >= profit_close) {
+    for (const auto& position : positions_) {
+      double last_price = 0;
+
+      if (position.second.direct == buy) {
+        last_price = md_instru1.bid_price1;
+        if (position.first == md_instru2.instru) {
+          last_price = md_instru2.bid_price1;
+        }
+
+        instruClose(position.first,
+                    sell,
+                    last_price,
+                    position.second.volume);
+      } else if (position.second.direct == sell) {
+        last_price = md_instru1.ask_price1;
+        if (position.first == md_instru2.instru) {
+          last_price = md_instru2.ask_price1;
+        }
+
+        instruClose(position.first,
+                    buy,
+                    last_price,
+                    position.second.volume);
+      }
+    }
+
+    return true;
+  }
+
+  return false;
 }
 
 // req order

@@ -57,14 +57,9 @@ class Order : public subject::ServiceCallback {
                   double price,
                   int volume);
 
-  void instruClose(const std::string& instru,
-                   const std::string& direct,
-                   double price,
-                   int volume);
 
-  double calProfit(const MDInfo&,
-                const MDInfo&);
-
+  bool closePositionEvent(const MDInfo&,
+                          const MDInfo&);
 
   // @ret
   //  1: all orders removed, short position without order
@@ -103,6 +98,15 @@ class Order : public subject::ServiceCallback {
   // 3: position with order
   // 4: position without order
   int state();
+
+  void instruClose(const std::string& instru,
+                   const std::string& direct,
+                   double price,
+                   int volume);
+
+  double calProfit(const MDInfo&,
+                const MDInfo&);
+
 
  private:
   Server* server_;
